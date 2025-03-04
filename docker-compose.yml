@@ -1,0 +1,20 @@
+services:
+  api:
+    container_name: events_api
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - "8700:80"
+    volumes:
+      - ./app:/home/app/webapp/app
+    networks:
+      - localstack_network
+
+volumes:
+  data:
+    driver: local
+
+networks:
+  localstack_network:
+    external: true
