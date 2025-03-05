@@ -1,6 +1,11 @@
 inherit_gem:
   rubocop-shopify: rubocop.yml
 
+require:
+  - rubocop-performance
+  - rubocop-rspec
+  - rubocop-factory_bot
+
 AllCops:
   TargetRubyVersion: 3.0
   Exclude:

@@ -7,12 +7,7 @@ services:
     ports:
       - "8700:80"
     volumes:
-      - ./app:/home/app/webapp/app
-      - ./config:/home/app/webapp/config
-      - ./db:/home/app/webapp/db
-      - ./lib:/home/app/webapp/lib
-      - ./spec:/home/app/webapp/spec
-      - ./storage:/home/app/webapp/storage
+      - ./:/home/app/webapp
     networks:
       - localstack_network
 

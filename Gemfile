@@ -22,12 +22,16 @@ gem "elasticsearch-rails", "~> 7.2.1", ">= 7.2.1"
 gem "elasticsearch-transport", "~> 7.17", ">= 7.17.10"
 
 group :development, :test do
-  gem "debug", platforms: %i[ mri windows ]
-  gem 'rubocop', require: false
+  gem "debug", platforms: [:mri, :windows]
+  gem "rubocop", require: false
   gem "rubocop-shopify", require: false
-  gem 'bundler-audit', require: false
-  gem 'brakeman', require: false
-  gem 'reek', require: false
+  gem "rubocop-rspec", require: false
+  gem "rubocop-performance", require: false
+  gem "factory_bot_rails", require: false
+  gem "rubocop-factory_bot", require: false
+  gem "bundler-audit", require: false
+  gem "brakeman", require: false
+  gem "reek", require: false
 end
 
 group :development do
