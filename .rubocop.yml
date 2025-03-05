@@ -1,9 +1,12 @@
 inherit_gem:
   rubocop-shopify: rubocop.yml
 
-require:
+plugins:
   - rubocop-performance
+  - rubocop-rails
   - rubocop-rspec
+
+require:
   - rubocop-factory_bot
 
 AllCops:
@@ -22,7 +25,7 @@ Style/MethodCallWithArgsParentheses:
   EnforcedStyle: require_parentheses
 
 Style/StringLiterals:
-  EnforceStyle: double_quotes
+  EnforcedStyle: double_quotes
 
 Style/StringLiteralsInInterpolation:
-  EnforceStyle: double_quotes
+  EnforcedStyle: double_quotes
