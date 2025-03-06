@@ -18,9 +18,6 @@ AllCops:
     - "vendor/**/*"
     - "db/schema.rb"
 
-Layout/SpaceInsideParens:
-  EnforcedStyle: space
-
 Style/MethodCallWithArgsParentheses:
   EnforcedStyle: require_parentheses
 
@@ -29,3 +26,6 @@ Style/StringLiterals:
 
 Style/StringLiteralsInInterpolation:
   EnforcedStyle: double_quotes
+
+Layout/SpaceInsideHashLiteralBraces:
+  Enabled: true

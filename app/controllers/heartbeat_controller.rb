@@ -3,6 +3,6 @@
 class HeartbeatController < ApplicationController
   def index
     message = { healthy: true }
-    render( json: message )
+    render(json: message)
   end
 end

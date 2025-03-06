@@ -32,6 +32,7 @@ group :development, :test do
   gem "factory_bot_rails", require: false
   gem "bundler-audit", require: false
   gem "brakeman", require: false
+  gem "rspec-rails", "~> 7.0.0"
 end
 
 group :development do

@@ -7,21 +7,23 @@ services:
     ports:
       - "8700:80"
     volumes:
-      - ./:/home/app/webapp
       - ./app:/home/app/webapp/app
       - ./config:/home/app/webapp/config
       - ./db:/home/app/webapp/db
       - ./lib:/home/app/webapp/lib
       - ./spec:/home/app/webapp/spec
       - ./storage:/home/app/webapp/storage
-      - ./vendor/bundle:/home/app/webapp/vendor/bundle
       - ./tmp:/home/app/webapp/tmp
+      - bundle_cache:/home/app/webapp/vendor/bundle
+      - ./Gemfile:/home/app/webapp/Gemfile
     dns:
       - 10.0.2.20
     networks:
       - localstack_network
 
 volumes:
+  bundle_cache:
+  gemfile:
   data:
     driver: local
 
