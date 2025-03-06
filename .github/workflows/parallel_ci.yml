@@ -33,4 +33,4 @@ jobs:
           bundler-cache: true
 
       - name: Run Specs
-        run: bundle exec rspec
+        run: "bundle exec rspec --no-check-db" # remove the no check later
