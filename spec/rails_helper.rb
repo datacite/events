@@ -30,7 +30,9 @@ require "rspec/rails"
 # Checks for pending migrations and applies them before tests are run.
 # If you are not using ActiveRecord, you can remove these lines.
 begin
-  ActiveRecord::Migration.maintain_test_schema!
+  # ActiveRecord::Migration.maintain_test_schema!
+  puts "skipping ActiveRecord::Migration.maintain_test_schema! for now"
+  puts "add back when test db is setup"
 rescue ActiveRecord::PendingMigrationError => e
   abort(e.to_s.strip)
 end
