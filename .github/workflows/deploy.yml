@@ -2,7 +2,7 @@ name: Deploy Main to Staging
 on:
   push:
     branches:
-      - "master"
+      - main
 jobs:
   lint:
     uses: ./.github/workflows/rubocop.yml
