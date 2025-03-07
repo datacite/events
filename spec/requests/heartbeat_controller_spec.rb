@@ -4,25 +4,19 @@ require "rails_helper"
 
 RSpec.describe("HeartbeatControllers", type: :request) do
   describe "GET /index" do
-    before do
-      get "/heartbeat"
-    end
-
     it "returns a 200 status code" do
+      get "/heartbeat"
       expect(response).to(have_http_status(200))
     end
 
     it "returns json" do
-      expect(response.content_type).to(eq("application/json"))
+      get "/heartbeat"
+      expect(response.content_type).to(eq("application/json; charset=utf-8"))
     end
 
     it "retrurns the expected data" do
-      expect(JSON.parse(response.body)).to(eq({ message: "healthy" }))
+      get "/heartbeat"
+      expect(JSON.parse(response.body, symbolize_names: true)).to(eq({ healthy: true }))
     end
-    # get "/heartbeat"
-
-    # expect(response).to have_http_status(200)
-    # expect(response.content_type).to eq("application/json")
-    # expect(JSON.parse(response.body)).to eq({message: "healthy"})
   end
 end
