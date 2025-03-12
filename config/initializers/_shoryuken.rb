@@ -4,7 +4,7 @@ if Rails.env.development?
   Aws.config.update({
     endpoint: ENV["AWS_ENDPOINT"],
     region: "us-east-1",
-    credentials: Aws::Credentials.new("test", "test")
+    credentials: Aws::Credentials.new("test", "test"),
   })
 end
 
@@ -26,8 +26,8 @@ end
 Shoryuken.configure_server do |config|
   config.server_middleware do |chain|
     # remove logging of timing events
-    chain.remove Shoryuken::Middleware::Server::Timing
-    chain.add Shoryuken::Middleware::Server::RavenReporter
+    chain.remove(Shoryuken::Middleware::Server::Timing)
+    chain.add(Shoryuken::Middleware::Server::RavenReporter)
   end
 end
 
