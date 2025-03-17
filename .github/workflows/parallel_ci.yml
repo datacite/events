@@ -1,59 +1,27 @@
 name: Parallel CI
 on:
   workflow_call:
-    secrets:
-      SECRET_KEY_BASE:
-        required: true
-      SESSION_ENCRYPTED_COOKIE_SALT:
-        required: true
-      JWT_PRIVATE_KEY:
-        required: true
-      JWT_PUBLIC_KEY:
-        required: true
-      MDS_USERNAME:
-        required: true
-      MDS_PASSWORD:
-        required: true
-      AWS_REGION:
-        required: true
-      AWS_ACCESS_KEY_ID:
-        required: true
-      AWS_SECRET_ACCESS_KEY:
-        required: true
 jobs:
   parallel-test:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: true
     services:
-      mysql:
-        image: mysql:8.0.36
-        env:
-          MYSQL_DATABASE: datacite
-          MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      memcached:
+        image: memcached:1.4.31
         ports:
-          - 3306
-      elasticsearch:
-        image: opensearchproject/opensearch:2
-        env:
-          discovery.type: single-node
-          OPENSEARCH_JAVA_OPTS: -Xms512m -Xmx512m
-          OPENSEARCH_INITIAL_ADMIN_PASSWORD: AnUnsecurePassword123
-          DISABLE_SECURITY_PLUGIN: true
-          http.cors.enabled: true
-          bootstrap.memory_lock: true
-          http.cors.allow-origin: "*"
-          compatibility.override_main_response_version: true
-          logger.org.opensearch.discovery: "ERROR"
-        ports:
-          - 9200
+          - 11211/udp
     env:
-      LOG_LEVEL: "info"
-      MYSQL_HOST: "127.0.0.1"
-      MYSQL_DATABASE: datacite
-      MYSQL_USER: root
-      ES_HOST: "localhost:9200"
-      ELASTIC_PASSWORD: "AnUnsecurePassword123"
+      MEMCACHE_SERVERS: "localhost:11211"
+      SECRET_KEY_BASE: ${{ secrets.SECRET_KEY_BASE }}
+      SESSION_ENCRYPTED_COOKIE_SALT: ${{ secrets.SESSION_ENCRYPTED_COOKIE_SALT }}
+      JWT_PRIVATE_KEY: ${{ secrets.JWT_PRIVATE_KEY }}
+      JWT_PUBLIC_KEY: ${{ secrets.JWT_PUBLIC_KEY }}
+      AWS_REGION: ${{ secrets.AWS_REGION }}
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      STAFF_ADMIN_TOKEN: ${{ secrets.STAFF_ADMIN_TOKEN }}
+      STAFF_PROFILES_ADMIN_TOKEN: ${{ secrets.STAFF_PROFILES_ADMIN_TOKEN }}
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3

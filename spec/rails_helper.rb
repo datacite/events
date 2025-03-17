@@ -24,4 +24,7 @@ RSpec.configure do |config|
   config.infer_spec_type_from_file_location!
 
   config.filter_rails_from_backtrace!
+
+  # Use the activerecord-nulldb-adapter to skip db dependency for specs
+  ActiveRecord::establish_connection(adapter: :nulldb)
 end
