@@ -48,6 +48,7 @@ jobs:
         ports:
           - 9200
     env:
+      LOG_LEVEL: "info"
       MYSQL_HOST: "127.0.0.1"
       MYSQL_DATABASE: datacite
       MYSQL_USER: root
