@@ -26,5 +26,5 @@ RSpec.configure do |config|
   config.filter_rails_from_backtrace!
 
   # Use the activerecord-nulldb-adapter to skip db dependency for specs
-  ActiveRecord::establish_connection(adapter: :nulldb)
+  ActiveRecord.establish_connection(adapter: :nulldb)
 end
