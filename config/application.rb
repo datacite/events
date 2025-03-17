@@ -31,7 +31,7 @@ module Events
 
     config.active_job.logger = Logger.new(nil)
 
-    # Configure logging start
+    # Start: Configure Logging
     config.lograge.enabled = true
     config.lograge.formatter = Lograge::Formatters::Logstash.new
     config.lograge.logger = LogStashLogger.new(type: :stdout)
@@ -63,6 +63,6 @@ module Events
         uid: event.payload[:uid],
       }
     end
-    # Configure logging end
+    # End: Configure Logging
   end
 end
