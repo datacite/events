@@ -36,7 +36,7 @@ module Events
     config.lograge.formatter = Lograge::Formatters::Logstash.new
     config.lograge.logger = LogStashLogger.new(type: :stdout)
     config.logger = config.lograge.logger ## LogStashLogger needs to be pass to rails logger, see roidrage/lograge#26
-    config.log_level = ENV["LOG_LEVEL"]&.to_sym || :info
+    config.log_level = ENV["LOG_LEVEL"].to_sym
 
     config.lograge.ignore_actions = [
       "HeartbeatController#index",
