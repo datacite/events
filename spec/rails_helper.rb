@@ -7,6 +7,8 @@ require_relative "../config/environment"
 abort("The Rails environment is running in production mode!") if Rails.env.production?
 
 require "rspec/rails"
+require "active_record"
+require "nulldb"
 
 # begin
 #   ActiveRecord::Migration.maintain_test_schema!
@@ -24,4 +26,7 @@ RSpec.configure do |config|
   config.infer_spec_type_from_file_location!
 
   config.filter_rails_from_backtrace!
+
+  # Use the activerecord-nulldb-adapter to skip db dependency for specs
+  ActiveRecord.establish_connection(adapter: :nulldb)
 end
