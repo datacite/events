@@ -1,0 +1,13 @@
+name: Lint and Test Pull Request
+on:
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+jobs:
+  lint:
+    uses: ./.github/workflows/rubocop.yml
+  parallel-test:
+    needs: lint
+    uses: ./.github/workflows/parallel_ci.yml
+    secrets: inherit

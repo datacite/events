@@ -1,0 +1,32 @@
+name: Parallel CI
+on:
+  workflow_call:
+jobs:
+  parallel-test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+    services:
+      memcached:
+        image: memcached:1.4.31
+        ports:
+          - 11211/udp
+    env:
+      LOG_LEVEL: "error"
+      MYSQL_HOST: "127.0.0.1"
+      MYSQL_DATABASE: datacite
+      MYSQL_USER: root
+      ES_HOST: "localhost:9200"
+      ELASTIC_PASSWORD: "AnUnsecurePassword123"
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Set up Ruby 3.1.6
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.1.6"
+          bundler-cache: true
+
+      - name: Run Specs
+        run: bundle exec rspec

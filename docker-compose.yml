@@ -1,0 +1,32 @@
+services:
+  api:
+    container_name: events_api
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - "8700:80"
+    volumes:
+      - ./app:/home/app/webapp/app
+      - ./config:/home/app/webapp/config
+      - ./db:/home/app/webapp/db
+      - ./lib:/home/app/webapp/lib
+      - ./spec:/home/app/webapp/spec
+      - ./storage:/home/app/webapp/storage
+      - ./tmp:/home/app/webapp/tmp
+      - bundle_cache:/home/app/webapp/vendor/bundle
+      - ./Gemfile:/home/app/webapp/Gemfile
+    dns:
+      - 10.0.2.20
+    networks:
+      - localstack_network
+
+volumes:
+  bundle_cache:
+  gemfile:
+  data:
+    driver: local
+
+networks:
+  localstack_network:
+    external: true

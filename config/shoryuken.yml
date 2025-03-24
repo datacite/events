@@ -1,0 +1,11 @@
+concurrency: 10
+delay: 0
+pidfile: tmp/pids/shoryuken.pid
+queues:
+  - events
+
+groups:
+  events:
+    concurrency: 10
+    queues:
+      - events
