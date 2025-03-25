@@ -1,6 +1,14 @@
 services:
   api:
     container_name: events_api
+    environment:
+      - LOG_LEVEL=debug
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=
+      - MYSQL_DATABASE=datacite
+      - MYSQL_HOST=lupo_mysql
+      - MYSQL_PORT=3306
+      - MYSQL_ALLOW_EMPTY_PASSWORD=true
     build:
       context: ./
       dockerfile: Dockerfile
