@@ -2,6 +2,7 @@
 
 class EventsController < ApplicationController
   def index
+    Sentry.capture_message("events_controller test message")
     render(json: { message: "index" })
   end
 
