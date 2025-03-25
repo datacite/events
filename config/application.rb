@@ -33,7 +33,7 @@ module Events
 
     config.secret_key_base = "blipblapblup"
 
-    config.logger = Logger.new(STDOUT)
+    config.logger = Logger.new($stdout)
     config.log_level = :info
   end
 end

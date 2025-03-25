@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 Raven.configure do |config|
-  config.environments = %w(stage production)
+  config.environments = ["stage", "production"]
   config.dsn = ENV["SENTRY_DSN"]
   config.release = "events:" + Events::Application::VERSION
   config.sanitize_fields = Rails.application.config.filter_parameters.map(&:to_s)

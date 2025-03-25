@@ -16,10 +16,10 @@ Datadog.configure do |c|
   c.tracing.log_injection = false
 
   # Instrumentation
-  c.tracing.instrument :rails
-  c.tracing.instrument :elasticsearch
-  c.tracing.instrument :shoryuken
-  c.tracing.instrument :graphql, enabled: false, with_deprecated_tracers: true
+  c.tracing.instrument(:rails)
+  c.tracing.instrument(:elasticsearch)
+  c.tracing.instrument(:shoryuken)
+  c.tracing.instrument(:graphql, enabled: false, with_deprecated_tracers: true)
 
   # Profiling setup
   c.profiling.enabled = ENV["RAILS_ENV"] == "stage"
