@@ -31,6 +31,8 @@ module Events
 
     config.active_job.logger = Logger.new(nil)
 
+    config.secret_key_base = "blipblapblup"
+
     # Start: Configure Logging
     config.lograge.enabled = true
     config.lograge.formatter = Lograge::Formatters::Logstash.new
