@@ -4,7 +4,7 @@ Sentry.init do |config|
   config.enabled_environments = ["stage", "production"]
   config.dsn = ENV["SENTRY_DSN"]
   config.release = "events:" + Events::Application::VERSION
-  config.logger = Rails.application.config.lograge.logger
+  # config.logger = Rails.application.config.lograge.logger
   config.send_default_pii = true
 
   filter = ActiveSupport::ParameterFilter.new(Rails.application.config.filter_parameters)
