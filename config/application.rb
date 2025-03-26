@@ -19,6 +19,8 @@ if File.exist?(env_json_file)
   env_vars.each { |k, v| ENV[k] = v }
 end
 
+ENV["GITHUB_URL"] ||= "https://github.com/datacite/events"
+
 module Events
   class Application < Rails::Application
     config.load_defaults(7.1)
