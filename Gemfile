@@ -7,7 +7,6 @@ ruby "3.1.6"
 gem "rails", "~> 7.1.3", ">= 7.1.3.2"
 gem "bootsnap", require: false
 gem "rack-cors"
-gem "datadog", require: "datadog/auto_instrument"
 gem "shoryuken", "~> 4.0"
 gem "aws-sdk-sqs", "~> 1.3"
 gem "lograge", "~> 0.11.2"
