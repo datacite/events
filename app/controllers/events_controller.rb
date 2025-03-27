@@ -7,20 +7,8 @@ class EventsController < ApplicationController
       uuid: "new_uuid",
       created_at: Time.now.utc,
     }
-    Factories::EventFactory.create_instance(attributes)
-    event = Event.new
-    event.attributes = {
-      id: 1,
-      uuid: "new_uuid",
-      created_at: Time.now.utc,
-    }
-    data = {
-      body: event,
-      id: event.id,
-      uuid: event.uuid,
-      created_at: event.created_at,
-    }
-    render(json: { data: data })
+    event = Event.new(attributes)
+    render(json: { data: event })
   end
 
   def create

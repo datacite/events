@@ -64,5 +64,8 @@ COPY vendor/docker/10_ssh.sh /etc/my_init.d/10_ssh.sh
 # COPY vendor/docker/80_flush_cache.sh /etc/my_init.d/80_flush_cache.sh
 COPY vendor/docker/90_migrate.sh /etc/my_init.d/90_migrate.sh
 
+# Add the directory to the list of safe directories
+RUN git config --global --add safe.directory /home/app/webapp
+
 # Expose web
 EXPOSE 80
