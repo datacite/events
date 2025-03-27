@@ -6,7 +6,7 @@ RSpec.describe("HeartbeatControllers", type: :request) do
   describe "GET /index" do
     it "returns a 200 status code" do
       get "/heartbeat"
-      expect(response).to(have_http_status(200))
+      expect(response).to(have_http_status(:ok))
     end
 
     it "returns json" do
