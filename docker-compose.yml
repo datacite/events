@@ -9,6 +9,10 @@ services:
       - MYSQL_HOST=lupo_mysql
       - MYSQL_PORT=3306
       - MYSQL_ALLOW_EMPTY_PASSWORD=true
+      - ES_HOST=lupo_opensearch
+      - ES_PORT=9200
+      - ES_SCHEME=http
+      - ELASTIC_PASSWORD=AnUnsecurePassword123
     build:
       context: ./
       dockerfile: Dockerfile
@@ -25,10 +29,10 @@ services:
       - bundle_cache:/home/app/webapp/vendor/bundle
       - ./Gemfile:/home/app/webapp/Gemfile
       - ./Gemfile.lock:/home/app/webapp/Gemfile.lock
-    dns:
-      - 10.0.2.20
     networks:
       - localstack_network
+    dns:
+      - 10.0.2.20
 
 volumes:
   bundle_cache:

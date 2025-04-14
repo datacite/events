@@ -21,6 +21,9 @@ gem "elasticsearch-model", "~> 7.2.1", ">= 7.2.1", require: "elasticsearch/model
 gem "elasticsearch-rails", "~> 7.2.1", ">= 7.2.1"
 gem "elasticsearch-transport", "~> 7.17", ">= 7.17.10"
 gem "git", "~> 1.5"
+gem "faraday", "~> 2.9"
+gem "faraday_middleware-aws-sigv4", "~> 0.3.0"
+gem "faraday-excon"
 
 # This gem will allow us to write tests without the need for a database
 gem "activerecord-nulldb-adapter", "~> 1.1", ">= 1.1.1"
