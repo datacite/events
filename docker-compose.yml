@@ -24,6 +24,7 @@ services:
       - ./tmp:/home/app/webapp/tmp
       - bundle_cache:/home/app/webapp/vendor/bundle
       - ./Gemfile:/home/app/webapp/Gemfile
+      - ./Gemfile.lock:/home/app/webapp/Gemfile.lock
     dns:
       - 10.0.2.20
     networks:

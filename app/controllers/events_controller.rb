@@ -2,8 +2,13 @@
 
 class EventsController < ApplicationController
   def index
-    Sentry.capture_message("events_controller test message")
-    render(json: { message: "index" })
+    attributes = {
+      id: 1,
+      uuid: "new_uuid",
+      created_at: Time.now.utc,
+    }
+    event = Event.new(attributes)
+    render(json: { data: event })
   end
 
   def create
