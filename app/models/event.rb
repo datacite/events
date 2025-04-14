@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Event < ApplicationRecord
   # include Modelable
   # include Identifiable
@@ -30,7 +32,8 @@ class Event < ApplicationRecord
   # Validations
   validates :uuid, presence: true, uniqueness: {
     case_sensitive: false,
-    length: { maximum: 36 } }
+    length: { maximum: 36 },
+  }
   validates :subj_id, presence: true
   validates :message_action, presence: true, length: { maximum: 191 }
   validates :created_at, presence: true
