@@ -2,13 +2,7 @@
 
 class EventsController < ApplicationController
   def index
-    attributes = {
-      id: 1,
-      uuid: "new_uuid",
-      created_at: Time.now.utc,
-    }
-    event = Event.new(attributes)
-    render(json: { data: event })
+    render(json: { data: Elasticsearch::Model.client.info })
   end
 
   def create
