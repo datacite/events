@@ -9,7 +9,7 @@ Elasticsearch::Model.client = if ENV["ES_HOST"].end_with?(".datacite.org")
     host: ENV["ES_HOST"],
     port: "80",
     scheme: "http",
-    request_timeout: ENV["ES_REQUEST_TIMEOUT"].to_i,
+    request_timeout: 120,
   ) do |f|
     f.request(
       :aws_sigv4,
