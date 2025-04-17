@@ -3,8 +3,8 @@
 if Rails.env.development?
   Aws.config.update({
     endpoint: ENV["AWS_ENDPOINT"],
-    region: "us-east-1",
-    credentials: Aws::Credentials.new("test", "test"),
+    region: ENV["AWS_REGION"],
+    credentials: Aws::Credentials.new(ENV["AWS_ACCESS_KEY"], ENV["AWS_SECRET_ACCESS_KEY"]),
   })
 end
 

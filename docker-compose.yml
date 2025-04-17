@@ -13,6 +13,11 @@ services:
       - ES_PORT=9200
       - ES_SCHEME=http
       - ELASTIC_PASSWORD=AnUnsecurePassword123
+      - AWS_ENDPOINT=http://localstack:4566
+      - AWS_ACCESS_KEY=test
+      - AWS_SECRET_ACCESS_KEY=test
+      - AWS_REGION=us-east-1
+      - DISABLE_QUEUE_WORKER=
     build:
       context: ./
       dockerfile: Dockerfile
