@@ -30,12 +30,12 @@ module Events
     # Autoload paths
     # You typically add directories to autoload_paths so that classes and modules are loaded
     # automatically as they are referenced. This makes development more convenient
-    # config.autoload_paths << "#{config.root}/app/models/factories"
+    # config.autoload_paths << "#{config.root}/app/workers"
 
     # Eager load paths
     # You typically add directories to eager_load_paths to ensure that all necessary classes
     # and modules are loaded at startup, improving performance in production.
-    # config.eager_load_paths << "#{config.root}/app/models/factories"
+    # config.eager_load_paths << "#{config.root}/app/workers"
 
     config.api_only = true
 

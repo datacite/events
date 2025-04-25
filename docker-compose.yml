@@ -2,6 +2,7 @@ services:
   api:
     container_name: events_api
     environment:
+      - RAILS_ENV=development
       - LOG_LEVEL=debug
       - MYSQL_USER=root
       - MYSQL_PASSWORD=
@@ -14,9 +15,9 @@ services:
       - ES_SCHEME=http
       - ELASTIC_PASSWORD=AnUnsecurePassword123
       - AWS_ENDPOINT=http://localstack:4566
-      - AWS_ACCESS_KEY=test
-      - AWS_SECRET_ACCESS_KEY=test
       - AWS_REGION=us-east-1
+      - AWS_ACCESS_KEY_ID=test
+      - AWS_SECRET_ACCESS_KEY=test
       - DISABLE_QUEUE_WORKER=
     build:
       context: ./
