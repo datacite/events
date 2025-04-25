@@ -3,9 +3,9 @@
 class EventImportWorker
   include Shoryuken::Worker
 
-  shoryuken_options queue: -> { "#{ENV['RAILS_ENV']}_events" }, auto_delete: true
+  shoryuken_options queue: -> { "#{ENV["RAILS_ENV"]}_events" }, auto_delete: true
 
-  def perform(sqs_message=nil, data=nil)
+  def perform(sqs_message = nil, data = nil)
     log_prefix = "[Events:EventImportWorker]"
 
     if data.blank?
