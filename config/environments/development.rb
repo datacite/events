@@ -5,7 +5,10 @@ require "active_support/core_ext/integer/time"
 Rails.application.configure do
   config.enable_reloading = true
 
-  config.eager_load = false
+  # Normally set to false as this speeds up start up.
+  # Setting to true ensure that the Shoryuken workers are
+  # available in development when you try to start them up.
+  config.eager_load = true
 
   config.consider_all_requests_local = true
 
