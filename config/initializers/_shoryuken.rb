@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require Rails.root.join("app/workers/event_import_worker.rb")
-
 if Rails.env.development?
   Aws.config.update({
     endpoint: ENV["AWS_ENDPOINT"],
