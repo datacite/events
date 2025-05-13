@@ -24,6 +24,7 @@ gem "git", "~> 1.5"
 gem "faraday", "~> 2.9"
 gem "faraday_middleware-aws-sigv4", "~> 0.3.0"
 gem "faraday-excon"
+gem "uuid", "~> 2.3", ">= 2.3.9"
 
 # This gem will allow us to write tests without the need for a database
 gem "activerecord-nulldb-adapter", "~> 1.1", ">= 1.1.1"
