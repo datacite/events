@@ -10,8 +10,8 @@ module EventIndexHandler
       "uuid" => uuid,
       "subj_id" => subj_id,
       "obj_id" => obj_id,
-      "subj" => subj.merge(cache_key: subj_cache_key),
-      "obj" => obj.merge(cache_key: obj_cache_key),
+      "subj" => subj_hash.merge(cache_key: subj_cache_key),
+      "obj" => obj_hash.merge(cache_key: obj_cache_key),
       "source_doi" => source_doi,
       "target_doi" => target_doi,
       "source_relation_type_id" => source_relation_type_id,
@@ -46,32 +46,32 @@ module EventIndexHandler
   end
 
   def subj_cache_key
-    timestamp = subj["dateModified"] || Time.zone.now.iso8601
+    timestamp = subj_hash["dateModified"] || Time.zone.now.iso8601
     "objects/#{subj_id}-#{timestamp}"
   end
 
   def obj_cache_key
-    timestamp = obj["dateModified"] || Time.zone.now.iso8601
+    timestamp = obj_hash["dateModified"] || Time.zone.now.iso8601
     "objects/#{obj_id}-#{timestamp}"
   end
 
   def doi
-    Array.wrap(subj["proxyIdentifiers"]).grep(%r{\A10\.\d{4,5}/.+\z}) { ::Regexp.last_match(1) } +
-      Array.wrap(obj["proxyIdentifiers"]).grep(%r{\A10\.\d{4,5}/.+\z}) { ::Regexp.last_match(1) } +
-      Array.wrap(subj["funder"]).map { |f| doi_from_url(f["@id"]) }.compact +
-      Array.wrap(obj["funder"]).map { |f| doi_from_url(f["@id"]) }.compact +
-      [doi_from_url(subj_id), doi_from_url(obj_id)].compact
+    Array.wrap(subj_hash["proxyIdentifiers"]).grep(%r{\A10\.\d{4,5}/.+\z}) { ::Regexp.last_match(1) } +
+      Array.wrap(obj_hash["proxyIdentifiers"]).grep(%r{\A10\.\d{4,5}/.+\z}) { ::Regexp.last_match(1) } +
+      Array.wrap(subj_hash["funder"]).map { |f| DoiUtilities.doi_from_url(f["@id"]) }.compact +
+      Array.wrap(obj_hash["funder"]).map { |f| DoiUtilities.doi_from_url(f["@id"]) }.compact +
+      [DoiUtilities.doi_from_url(subj_id), DoiUtilities.doi_from_url(obj_id)].compact
   end
 
   def orcid
-    Array.wrap(subj["author"]).map { |f| orcid_from_url(f["@id"]) }.compact +
-      Array.wrap(obj["author"]).map { |f| orcid_from_url(f["@id"]) }.compact +
-      [orcid_from_url(subj_id), orcid_from_url(obj_id)].compact
+    Array.wrap(subj_hash["author"]).map { |f| OrcidUtilities.orcid_from_url(f["@id"]) }.compact +
+      Array.wrap(obj_hash["author"]).map { |f| OrcidUtilities.orcid_from_url(f["@id"]) }.compact +
+      [OrcidUtilities.orcid_from_url(subj_id), OrcidUtilities.orcid_from_url(obj_id)].compact
   end
 
   def issn
-    Array.wrap(subj.dig("periodical", "issn")).compact +
-      Array.wrap(obj.dig("periodical", "issn")).compact
+    Array.wrap(subj_hash.dig("periodical", "issn")).compact +
+      Array.wrap(obj_hash.dig("periodical", "issn")).compact
   rescue TypeError
     nil
   end
@@ -81,25 +81,25 @@ module EventIndexHandler
   end
 
   def subtype
-    [subj["@type"], obj["@type"]].compact
+    [subj_hash["@type"], obj["@type"]].compact
   end
 
   def citation_type
-    if subj["@type"].blank? || subj["@type"] == "CreativeWork" ||
-        obj["@type"].blank? ||
-        obj["@type"] == "CreativeWork"
+    if subj_hash["@type"].blank? || subj_hash["@type"] == "CreativeWork" ||
+        obj_hash["@type"].blank? ||
+        obj_hash["@type"] == "CreativeWork"
       return
     end
 
-    [subj["@type"], obj["@type"]].compact.sort.join("-")
+    [subj_hash["@type"], obj_hash["@type"]].compact.sort.join("-")
   end
 
   def registrant_id
     [
-      subj["registrantId"],
-      obj["registrantId"],
-      subj["providerId"],
-      obj["providerId"],
+      subj_hash["registrantId"],
+      obj_hash["registrantId"],
+      subj_hash["providerId"],
+      obj_hash["providerId"],
     ].compact
   end
 
@@ -129,12 +129,12 @@ module EventIndexHandler
       return ""
     end
 
-    subj_publication = subj["datePublished"] ||
-      subj["date_published"] ||
+    subj_publication = subj_hash["datePublished"] ||
+      subj_hash["date_published"] ||
       (date_published(subj_id) || year_month)
 
-    obj_publication = obj["datePublished"] ||
-      obj["date_published"] ||
+    obj_publication = obj_hash["datePublished"] ||
+      obj_hash["date_published"] ||
       (date_published(obj_id) || year_month)
 
     [subj_publication[0..3].to_i, obj_publication[0..3].to_i].max
@@ -142,6 +142,13 @@ module EventIndexHandler
 
   def cache_key
     timestamp = updated_at || Time.zone.now
+
     "events/#{uuid}-#{timestamp.iso8601}"
+  end
+
+  def date_published(doi)
+    item = Doi.find_by(doi: DoiUtilities.uppercase_doi_from_url(doi))
+
+    item[:publication_date] if item.present?
   end
 end

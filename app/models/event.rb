@@ -40,6 +40,15 @@ class Event < ApplicationRecord
   validates :updated_at, presence: true
   validates :indexed_at, presence: true
 
+  # Getters
+  def subj_hash
+    @subj_hash ||= JSON.parse(subj)
+  end
+
+  def obj_hash
+    @obj_hash ||= JSON.parse(obj)
+  end
+
   # Callback Hooks
   before_validation :set_source_and_target_doi!
   after_commit -> { EventIndexJob.perform_later(self) }

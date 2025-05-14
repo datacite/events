@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class EventIndexJob < ApplicationJob
-  queue_as :event_index
+  queue_as :events_index
 
   rescue_from ActiveJob::DeserializationError,
     SocketError,
@@ -12,11 +12,6 @@ class EventIndexJob < ApplicationJob
 
   def perform(obj)
     log_prefix = "[Events:EventIndexJob]"
-
-    if sqs_message.nil?
-      Rails.logger.info("#{log_prefix} sqs message was blank")
-      return
-    end
 
     response = obj.__elasticsearch__.index_document
 
