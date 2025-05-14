@@ -7,3 +7,7 @@ groups:
     concurrency: 10
     queues:
       - events
+  events_index:
+    concurrency: 10
+    queues:
+      - events_index
