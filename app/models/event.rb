@@ -42,7 +42,7 @@ class Event < ApplicationRecord
 
   # Callback Hooks
   before_validation :set_source_and_target_doi!
-  after_commit -> {EventIndexJob.perform_later(self) }
+  after_commit -> { EventIndexJob.perform_later(self) }
 
   # OpenSearch Mappings
   mapping dynamic: "false" do
