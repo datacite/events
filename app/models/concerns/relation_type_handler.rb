@@ -4,6 +4,7 @@
 # Method is only invoked via a before_validation callback in the events model.
 
 module RelationTypeHandler
+  include RelationTypes
   extend ActiveSupport::Concern
 
   def set_source_and_target_doi!
@@ -48,16 +49,4 @@ module RelationTypeHandler
       self.target_relation_type_id = "part_of"
     end
   end
-
-  REFERENCE_RELATION_TYPES = [
-    "cites",
-    "is-supplemented-by",
-    "references",
-  ].freeze
-
-  CITATION_RELATION_TYPES = [
-    "is-cited-by",
-    "is-supplement-to",
-    "is-referenced-by",
-  ].freeze
 end
