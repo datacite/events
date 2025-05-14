@@ -5,7 +5,6 @@ module RelationTypes
     "cites", "is-supplemented-by", "references",
   ].freeze
 
-  # renamed to make it clearer that these relation types are grouped together as citations
   CITATION_RELATION_TYPES = [
     "is-cited-by",
     "is-supplement-to",
