@@ -2,24 +2,24 @@
 
 require "rails_helper"
 
-RSpec.describe("HeartbeatController", type: :request) do
+RSpec.describe("EventsController", type: :request) do
   describe "GET /index" do
     it "returns a 200 status code" do
-      get "/heartbeat"
+      get "/events"
 
       expect(response).to(have_http_status(:ok))
     end
 
     it "returns json" do
-      get "/heartbeat"
+      get "/events"
 
       expect(response.content_type).to(eq("application/json; charset=utf-8"))
     end
 
     it "returns the expected data" do
-      get "/heartbeat"
+      get "/events"
 
-      expected = { data: { healthy: true } }
+      expected = { data: { action: "events#index" } }
 
       expect(JSON.parse(response.body, symbolize_names: true)).to(eq(expected))
     end

@@ -42,4 +42,6 @@ Rails.application.configure do
 
   config.active_job.verbose_enqueue_logs = true
   config.action_controller.raise_on_missing_callback_actions = true
+
+  config.hosts << "www.example.com"
 end
