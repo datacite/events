@@ -30,3 +30,6 @@ Style/StringLiteralsInInterpolation:
 
 Layout/SpaceInsideHashLiteralBraces:
   Enabled: true
+
+RSpec/ExampleLength:
+  Enabled: false

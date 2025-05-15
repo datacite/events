@@ -4,19 +4,18 @@
 # Method is only invoked via a before_validation callback in the events model.
 
 module RelationTypeHandler
-  include RelationTypes
   extend ActiveSupport::Concern
 
   def set_source_and_target_doi!
     return if subj_id.blank? || obj_id.blank?
 
     case relation_type_id
-    when *REFERENCE_RELATION_TYPES
+    when *RelationTypes::REFERENCE_RELATION_TYPES
       self.source_doi = DoiUtilities.uppercase_doi_from_url(subj_id)
       self.target_doi = DoiUtilities.uppercase_doi_from_url(obj_id)
       self.source_relation_type_id = "references"
       self.target_relation_type_id = "citations"
-    when *CITATION_RELATION_TYPES
+    when *RelationTypes::CITATION_RELATION_TYPES
       self.source_doi = DoiUtilities.uppercase_doi_from_url(obj_id)
       self.target_doi = DoiUtilities.uppercase_doi_from_url(subj_id)
       self.source_relation_type_id = "references"
