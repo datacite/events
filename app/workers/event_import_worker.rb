@@ -75,7 +75,9 @@ class EventImportWorker
   def update_event(event, event_data, log_prefix, log_identifier)
     Rails.logger.info("#{log_prefix} Update an existing event for #{log_identifier}")
 
-    if event.update(data)
+    EventFactory.update_from_sqs(event, event_data)
+
+    if event.save
       Rails.logger.info("#{log_prefix} Event successfully updated for #{log_identifier}")
     else
       Rails.logger.error("#{log_prefix} Updating event failed for #{log_identifier}: #{event.errors.inspect}")
