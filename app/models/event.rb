@@ -14,8 +14,6 @@ class Event < ApplicationRecord
   attribute :callback, :text
   attribute :error_messages, :text
   attribute :source_token, :text
-  attribute :created_at, :datetime
-  attribute :updated_at, :datetime
   attribute :indexed_at, :datetime, default: -> { Time.zone.at(0) }
   attribute :occurred_at, :datetime
   attribute :message_action, :string, default: "create"
@@ -36,8 +34,6 @@ class Event < ApplicationRecord
   validates :source_id, presence: true
   validates :source_token, presence: true
   validates :message_action, presence: true, length: { maximum: 191 }
-  validates :created_at, presence: true
-  validates :updated_at, presence: true
   validates :indexed_at, presence: true
 
   # Getters
@@ -50,7 +46,12 @@ class Event < ApplicationRecord
   end
 
   # Callback Hooks
+
+  # We run some special logic in order to set the source and target doi
+  # and their related relation type ids.
   before_validation :set_source_and_target_doi!
+
+  # After the event is persisted successfully to the database, we index the event in OpenSearch.
   after_commit -> { EventIndexJob.perform_later(self) }
 
   # OpenSearch Mappings
