@@ -51,7 +51,7 @@ class Event < ApplicationRecord
   # and their related relation type ids.
   before_validation :set_source_and_target_doi!
 
-  # After the event is persisted successfully to the database, we index event in OpenSearch.
+  # After the event is persisted successfully to the database, we index the event in OpenSearch.
   after_commit -> { EventIndexJob.perform_later(self) }
 
   # OpenSearch Mappings
