@@ -128,7 +128,7 @@ RSpec.describe(EventFactory) do
 
       it "is set using Time.now.utc when not present in message body" do
         travel_to(Time.utc(2025, 1, 1, 0, 0, 0)) do
-          message = { }
+          message = {}
           event = described_class.create_instance_from_sqs(message)
 
           expect(event.occurred_at).to(eq("2025-01-01 00:00:00"))
@@ -138,7 +138,7 @@ RSpec.describe(EventFactory) do
 
     describe "message_action" do
       it "is set to 'create'" do
-        message = { }
+        message = {}
         event = described_class.create_instance_from_sqs(message)
 
         expect(event.message_action).to(eq("create"))
@@ -169,9 +169,9 @@ RSpec.describe(EventFactory) do
           "name" => "DataCite",
           "location" => {
             "type" => "postalAddress",
-            "addressCountry" => "France"
-            }
-          }
+            "addressCountry" => "France",
+          },
+        }
 
         message = { "subj" => subj }
         event = described_class.create_instance_from_sqs(message)
@@ -195,9 +195,9 @@ RSpec.describe(EventFactory) do
           "name" => "DataCite",
           "location" => {
             "type" => "postalAddress",
-            "addressCountry" => "France"
-            }
-          }
+            "addressCountry" => "France",
+          },
+        }
 
         message = { "obj" => obj }
         event = described_class.create_instance_from_sqs(message)
