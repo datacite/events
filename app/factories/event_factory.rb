@@ -3,7 +3,7 @@
 module EventFactory
   class << self
     # Creates and returns an event from the dequeued message from the events SQS queue.
-    def create_from_sqs(message)
+    def create_instance_from_sqs(message)
       Event.new(
         uuid: message["uuid"] || SecureRandom.uuid,
         subj_id: DoiUtilities.normalize_doi(message["subjId"]) || message["subjId"],
@@ -21,7 +21,7 @@ module EventFactory
       )
     end
 
-    def update_from_sqs(event, message)
+    def update_instance_from_sqs(event, message)
       event.uuid = message["uuid"] if message["uuid"].present?
       event.source_id = message["sourceId"] if message["sourceId"].present?
       event.source_token = message["sourceToken"] if message["sourceToken"].present?
