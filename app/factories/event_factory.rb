@@ -13,7 +13,7 @@ module EventFactory
         source_token: message["sourceToken"],
         total: message["total"] || 1,
         occurred_at: message["occurredAt"] || Time.now.utc,
-        message_action: "create",
+        message_action: message["messageAction"] || "create",
         relation_type_id: message["relationTypeId"] || "references",
         subj: message["subj"]&.to_json,
         obj: message["obj"]&.to_json,

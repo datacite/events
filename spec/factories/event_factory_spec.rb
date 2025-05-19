@@ -137,7 +137,14 @@ RSpec.describe(EventFactory) do
     end
 
     describe "message_action" do
-      it "is set to 'create'" do
+      it "is set from message body when present" do
+        message = { "messageAction" => "fake-message-action" }
+        event = described_class.create_instance_from_sqs(message)
+
+        expect(event.message_action).to(eq("fake-message-action"))
+      end
+
+      it "is set to 'create' when not present in message body" do
         message = {}
         event = described_class.create_instance_from_sqs(message)
 
@@ -226,6 +233,31 @@ RSpec.describe(EventFactory) do
         event = described_class.create_instance_from_sqs(message)
 
         expect(event.license).to(eq("https://creativecommons.org/publicdomain/zero/1.0/"))
+      end
+    end
+
+    describe "source_id" do
+      it "is set via the message body when present" do
+        message = { "sourceId" => "orcid-affiliation" }
+        event = described_class.create_instance_from_sqs(message)
+
+        expect(event.source_id).to(eq("orcid-affiliation"))
+      end
+
+      it "is nil when not present in message body" do
+        message = {}
+        event = described_class.create_instance_from_sqs(message)
+
+        expect(event.source_id).to(be_nil)
+      end
+    end
+
+    describe "indexed_at" do
+      it "is set to '1970-01-01 00:00:00'" do
+        message = {}
+        event = described_class.create_instance_from_sqs(message)
+
+        expect(event.indexed_at).to(eq("1970-01-01 00:00:00"))
       end
     end
   end
