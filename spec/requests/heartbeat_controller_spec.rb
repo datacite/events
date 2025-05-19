@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe("HeartbeatController", type: :request) do
+RSpec.describe(HeartbeatController, type: :request) do
   describe "GET /index" do
     it "returns a 200 status code" do
       get "/heartbeat"

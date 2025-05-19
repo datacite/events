@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe("EventsController", type: :request) do
+RSpec.describe(EventsController, type: :request) do
   describe "GET /index" do
     it "returns a 200 status code" do
       get "/events"

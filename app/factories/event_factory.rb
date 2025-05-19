@@ -12,15 +12,16 @@ module EventFactory
         aasm_state: "waiting",
         source_token: message["sourceToken"],
         total: message["total"] || 1,
-        occurred_at: message["occurred_at"] || Time.now.utc,
+        occurred_at: message["occurredAt"] || Time.now.utc,
         message_action: "create",
-        relation_type_id: message["relation_type_id"] || "references",
-        subj: message["subj"].to_json,
-        obj: message["obj"].to_json,
+        relation_type_id: message["relationTypeId"] || "references",
+        subj: message["subj"]&.to_json,
+        obj: message["obj"]&.to_json,
         license: message["license"] || "https://creativecommons.org/publicdomain/zero/1.0/",
       )
     end
 
+    # Updates attributes of and returns an event from the dequeued message from the events SQS queue.
     def update_instance_from_sqs(event, message)
       event.uuid = message["uuid"] if message["uuid"].present?
       event.source_id = message["sourceId"] if message["sourceId"].present?
