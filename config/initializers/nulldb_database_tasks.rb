@@ -1,9 +1,13 @@
+# frozen_string_literal: true
+
 # Patch DatabaseTasks for nulldb to prevent schema loading attempts
 if Rails.env.test? && defined?(ActiveRecord::Tasks::DatabaseTasks)
-  module ActiveRecord::Tasks
-    class NullDBDatabaseTasks
-      def load_schema(*)
-        # no-op
+  module ActiveRecord
+    module Tasks
+      class NullDBDatabaseTasks
+        def load_schema(*)
+          # no-op
+        end
       end
     end
   end
@@ -14,7 +18,9 @@ end
 if Rails.env.test?
   module ActiveRecord
     class Migration
-      def self.check_pending!; end
+      class << self
+        def check_pending!; end
+      end
     end
   end
 end
