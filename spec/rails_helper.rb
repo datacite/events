@@ -26,6 +26,8 @@ RSpec.configure do |config|
 
   config.filter_rails_from_backtrace!
 
-  # Use the activerecord-nulldb-adapter to skip db dependency for specs
-  ActiveRecord::Base.establish_connection(adapter: :nulldb)
+  # Configure factory bot
+  config.include(FactoryBot::Syntax::Methods)
+  FactoryBot.definition_file_paths = ["spec/spec_factories"]
+  FactoryBot.find_definitions
 end

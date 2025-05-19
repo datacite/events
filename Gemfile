@@ -38,7 +38,7 @@ group :development, :test do
   gem "rubocop-factory_bot", require: false
   gem "rubocop-rails", require: false
   gem "rubocop-rspec_rails", require: false
-  gem "factory_bot_rails", require: false
+  gem "factory_bot_rails"
   gem "bundler-audit", require: false
   gem "brakeman", require: false
   gem "rspec-rails", "~> 7.0.0"

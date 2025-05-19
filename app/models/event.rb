@@ -26,6 +26,8 @@ class Event < ApplicationRecord
   attribute :source_relation_type_id, :string
   attribute :target_relation_type_id, :string
   attribute :relation_type_id, :string
+  attribute :source_id, :string
+  attribute :indexed_at, :datetime, default: "1970-01-01 00:00:00"
 
   # Validations
   validates :uuid, presence: true, uuid_format: true, uniqueness: { case_sensitive: false, length: { maximum: 36 } }

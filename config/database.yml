@@ -18,8 +18,9 @@ development:
   <<: *defaults
 
 test:
-  <<: *defaults
-  database: <%= ENV['MYSQL_DATABASE'] %>_test<%= ENV['TEST_ENV_NUMBER'] %>
+  # <<: *defaults
+  adapter: nulldb
+  # database: <%= ENV['MYSQL_DATABASE'] %>_test<%= ENV['TEST_ENV_NUMBER'] %>
 
 production:
   <<: *defaults

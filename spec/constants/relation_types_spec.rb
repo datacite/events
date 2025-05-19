@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe("RelationType") do
+RSpec.describe(RelationTypes) do
   describe "Constants" do
     it "defines REFERENCE_RELATION_TYPES correctly" do
       expected = ["cites", "is-supplemented-by", "references"]
