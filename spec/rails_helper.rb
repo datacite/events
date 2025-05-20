@@ -31,6 +31,4 @@ RSpec.configure do |config|
 
   # Configure factory bot
   config.include(FactoryBot::Syntax::Methods)
-  FactoryBot.definition_file_paths = ["spec/spec_factories"]
-  FactoryBot.find_definitions
 end
