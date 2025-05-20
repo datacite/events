@@ -3,13 +3,14 @@
 module DoiUtilities
   class << self
     def normalize_doi(url)
-      doi =
-        Array(%r{\A(?:(http|https):/(/)?(dx\.)?(doi.org|handle.test.datacite.org)/)?(doi:)?(10\.\d{4,5}/.+)\z}
-        .match(doi)).last
+      doi = Array(%r{\A(?:(http|https):/(/)?(dx\.)?(doi.org|handle.test.datacite.org)/)?(doi:)?(10\.\d{4,5}/.+)\z}
+        .match(url)).last
 
-      doi = doi.delete("\u200B").downcase if doi.present?
+      return if doi.blank?
 
-      "https://doi.org/#{doi}" if doi.present?
+      doi = doi.delete("\u200B").downcase
+
+      "https://doi.org/#{doi}"
     end
 
     def uppercase_doi_from_url(url)

@@ -29,7 +29,7 @@ RSpec.describe(EventFromSqsCreator) do
         message = { "subjId" => "https://doi.org/10.5281/zenodo.subjId" }
         event = described_class.create_instance_from_sqs(message)
 
-        expect(event.subj_id).to(eq("https://doi.org/10.5281/zenodo.subjId"))
+        expect(event.subj_id).to(eq("https://doi.org/10.5281/zenodo.subjid"))
       end
 
       it "is set using DoiUtilities when missing from message body" do
@@ -47,16 +47,16 @@ RSpec.describe(EventFromSqsCreator) do
         message = { "objId" => "https://doi.org/10.5281/zenodo.objId" }
         event = described_class.create_instance_from_sqs(message)
 
-        expect(event.obj_id).to(eq("https://doi.org/10.5281/zenodo.objId"))
+        expect(event.obj_id).to(eq("https://doi.org/10.5281/zenodo.objid"))
       end
 
       it "is set using DoiUtilities when missing from message body" do
-        allow(DoiUtilities).to(receive(:normalize_doi).and_return("https://doi.org/10.5281/zenodo.objId"))
+        allow(DoiUtilities).to(receive(:normalize_doi).and_return("https://doi.org/10.5281/zenodo.objid"))
 
         message = { "objId" => nil }
         event = described_class.create_instance_from_sqs(message)
 
-        expect(event.obj_id).to(eq("https://doi.org/10.5281/zenodo.objId"))
+        expect(event.obj_id).to(eq("https://doi.org/10.5281/zenodo.objid"))
       end
     end
 
