@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module EventIndexHandler
-  include RelationTypes
   extend ActiveSupport::Concern
 
   # Used to prepare the event record for indexing
@@ -125,7 +124,7 @@ module EventIndexHandler
   end
 
   def citation_year
-    if (INCLUDED_RELATION_TYPES + RELATIONS_RELATION_TYPES).exclude?(relation_type_id)
+    if (RelationTypes::INCLUDED_RELATION_TYPES + RelationTypes::RELATIONS_RELATION_TYPES).exclude?(relation_type_id)
       return ""
     end
 
