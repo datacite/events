@@ -212,4 +212,52 @@ RSpec.describe(Event, type: :model) do
       expect(described_class.new.total).to(eq(1))
     end
   end
+
+  describe "validates" do
+    it "uuid presence" do
+      expect(event).to(validate_presence_of(:uuid))
+    end
+
+    it "subj_id presence" do
+      expect(event).to(validate_presence_of(:subj_id))
+    end
+
+    it "obj_id presence" do
+      expect(event).to(validate_presence_of(:obj_id))
+    end
+
+    it "source_id presence" do
+      expect(event).to(validate_presence_of(:source_id))
+    end
+
+    it "source_token presence" do
+      expect(event).to(validate_presence_of(:source_token))
+    end
+
+    it "message_action presence" do
+      expect(event).to(validate_presence_of(:message_action))
+    end
+
+    it "indexed_at presence" do
+      expect(event).to(validate_presence_of(:indexed_at))
+    end
+
+    it "uuid length" do
+      expect(event).to(validate_length_of(:uuid))
+    end
+
+    it "uuid uniqueness" do
+      expect(event).to(validate_uniqueness_of(:uuid).case_insensitive)
+    end
+
+    it "uuid format" do
+      event.uuid = "invalid-uuid"
+
+      expect(event).not_to(be_valid)
+    end
+
+    it "message_action length" do
+      expect(event).to(validate_length_of(:message_action).is_at_most(191))
+    end
+  end
 end
