@@ -63,7 +63,7 @@ class EventImportWorker
   def create_event(event_data, log_prefix, log_identifier)
     Rails.logger.info("#{log_prefix} Creating a new event for #{log_identifier}")
 
-    event = EventFactory.create_instance_from_sqs(event_data)
+    event = Event.create_instance_from_sqs(event_data)
 
     if event.save
       Rails.logger.info("#{log_prefix} Event successfully created for #{log_identifier}")
@@ -75,7 +75,7 @@ class EventImportWorker
   def update_event(event, event_data, log_prefix, log_identifier)
     Rails.logger.info("#{log_prefix} Update an existing event for #{log_identifier}")
 
-    EventFactory.update_instance_from_sqs(event, event_data)
+    event.update_instance_from_sqs(event_data)
 
     if event.save
       Rails.logger.info("#{log_prefix} Event successfully updated for #{log_identifier}")

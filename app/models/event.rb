@@ -3,6 +3,8 @@
 class Event < ApplicationRecord
   include RelationTypeHandler
   include EventIndexHandler
+  include EventFromSqsCreator
+  include EventFromSqsUpdater
   include Elasticsearch::Model
 
   # Attributes
