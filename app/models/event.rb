@@ -42,11 +42,21 @@ class Event < ApplicationRecord
 
   # Getters
   def subj_hash
-    @subj_hash ||= JSON.parse(subj)
+    return {} if subj.blank?
+
+    JSON.parse(subj)
+  rescue => e
+    Rails.logger.error("JSON parsing failed for event.subj: #{e.message}")
+    {}
   end
 
   def obj_hash
-    @obj_hash ||= JSON.parse(obj)
+    return {} if obj.blank?
+
+    JSON.parse(obj)
+  rescue => e
+    Rails.logger.error("JSON parsing failed for event.obj: #{e.message}")
+    {}
   end
 
   # Callback Hooks

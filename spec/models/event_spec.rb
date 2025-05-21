@@ -262,4 +262,54 @@ RSpec.describe(Event, type: :model) do
       expect(event).to(validate_length_of(:message_action).is_at_most(191))
     end
   end
+
+  describe "getters" do
+    describe "#subj_hash" do
+      it "returns an empty hash when subj is blank" do
+        event.subj = nil
+
+        expect(event.subj_hash).to(eq({}))
+      end
+
+      it "returns an empty hash when subj is not valid JSON" do
+        event.subj = "this is invalid json"
+
+        expect(event.subj_hash).to(eq({}))
+      end
+
+      it "logs an error when subj is not valid JSON" do
+        allow(Rails.logger).to(receive(:error))
+        allow(JSON).to(receive(:parse).and_raise(StandardError.new("error")))
+
+        event.subj = "this is invalid json"
+        event.subj_hash
+
+        expect(Rails.logger).to(have_received(:error).with("JSON parsing failed for event.subj: error"))
+      end
+    end
+
+    describe "#obj_hash" do
+      it "returns an empty hash when obj is blank" do
+        event.obj = nil
+
+        expect(event.obj_hash).to(eq({}))
+      end
+
+      it "returns an empty hash when obj is not valid JSON" do
+        event.obj = "this is invalid json"
+
+        expect(event.obj_hash).to(eq({}))
+      end
+
+      it "logs an error when obj is not valid JSON" do
+        allow(Rails.logger).to(receive(:error))
+        allow(JSON).to(receive(:parse).and_raise(StandardError.new("error")))
+
+        event.obj = "this is invalid json"
+        event.obj_hash
+
+        expect(Rails.logger).to(have_received(:error).with("JSON parsing failed for event.obj: error"))
+      end
+    end
+  end
 end
