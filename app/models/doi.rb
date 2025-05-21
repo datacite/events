@@ -5,7 +5,7 @@ class Doi
     def publication_date(doi)
       search_doi = DoiUtilities.uppercase_doi_from_url(doi)
 
-      return nil if search_doi.blank?
+      return if search_doi.blank?
 
       sql = "SELECT publication_year FROM dataset WHERE doi = :doi LIMIT 1"
       sanitized_sql = ActiveRecord::Base.send(:sanitize_sql_array, [sql, { doi: search_doi }])
