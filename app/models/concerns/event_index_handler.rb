@@ -146,8 +146,6 @@ module EventIndexHandler
   end
 
   def date_published(doi)
-    item = Doi.find_by(doi: DoiUtilities.uppercase_doi_from_url(doi))
-
-    item[:publication_date] if item.present?
+    Doi.publication_date(doi)
   end
 end
