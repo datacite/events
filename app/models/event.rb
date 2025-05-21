@@ -8,7 +8,7 @@ class Event < ApplicationRecord
   include Elasticsearch::Model
 
   # Attributes
-  attribute :uuid, :text
+  attribute :uuid, :string
   attribute :subj_id, :text
   attribute :obj_id, :text
   attribute :aasm_state, :string
