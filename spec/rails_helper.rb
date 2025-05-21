@@ -10,7 +10,7 @@ require_relative "../config/environment"
 abort("The Rails environment is running in production mode!") if Rails.env.production?
 
 require "rspec/rails"
-require 'shoulda/matchers'
+require "shoulda/matchers"
 
 # TODO: add this back when you create the new events database
 # begin
@@ -36,7 +36,7 @@ end
 
 Shoulda::Matchers.configure do |config|
   config.integrate do |with|
-    with.test_framework :rspec
-    with.library :rails
+    with.test_framework(:rspec)
+    with.library(:rails)
   end
 end
