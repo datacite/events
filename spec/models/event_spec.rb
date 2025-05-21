@@ -340,4 +340,49 @@ RSpec.describe(Event, type: :model) do
     #   end
     # end
   end
+
+  describe "mappings" do
+    it "defines the correct Elasticsearch mapping" do
+      mapping = described_class.__elasticsearch__.mappings.to_hash
+
+      expect(mapping[:properties].keys).to(include(
+        :uuid,
+        :subj_id,
+        :obj_id,
+        :doi,
+        :orcid,
+        :prefix,
+        :subtype,
+        :citation_type,
+        :issn,
+        :subj,
+        :obj,
+        :source_doi,
+        :target_doi,
+        :source_relation_type_id,
+        :target_relation_type_id,
+        :source_id,
+        :source_token,
+        :message_action,
+        :relation_type_id,
+        :registrant_id,
+        :access_method,
+        :metric_type,
+        :total,
+        :license,
+        :error_messages,
+        :callback,
+        :aasm_state,
+        :state_event,
+        :year_month,
+        :created_at,
+        :updated_at,
+        :indexed_at,
+        :occurred_at,
+        :citation_id,
+        :citation_year,
+        :cache_key,
+      ))
+    end
+  end
 end
