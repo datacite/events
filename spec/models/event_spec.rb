@@ -312,4 +312,30 @@ RSpec.describe(Event, type: :model) do
       end
     end
   end
+
+  describe "callbacks" do
+    describe "before_validation" do
+      it "excutes source_source_and_target_doi!" do
+        event = described_class.new
+
+        allow(event).to receive(:set_source_and_target_doi!).and_call_original
+
+        event.validate
+
+        expect(event).to(have_received(:set_source_and_target_doi!))
+      end
+    end
+
+    describe "after_commit" do
+      it "queues up the EventIndexJob" do
+        allow(EventIndexJob).to(receive(:perform_later))
+
+        event = described_class.new(attributes_for(:event))
+
+        event.save
+
+        expect(EventIndexJob).to(have_received(:perform_later).with(event))
+      end
+    end
+  end
 end
