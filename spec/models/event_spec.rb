@@ -318,7 +318,7 @@ RSpec.describe(Event, type: :model) do
       it "excutes source_source_and_target_doi!" do
         event = described_class.new
 
-        allow(event).to receive(:set_source_and_target_doi!).and_call_original
+        allow(event).to(receive(:set_source_and_target_doi!).and_call_original)
 
         event.validate
 
