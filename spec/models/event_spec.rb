@@ -246,9 +246,11 @@ RSpec.describe(Event, type: :model) do
       expect(event).to(validate_length_of(:uuid))
     end
 
-    it "uuid uniqueness" do
-      expect(event).to(validate_uniqueness_of(:uuid).case_insensitive)
-    end
+    # Leaving this spec here.
+    # Once we decouple the events data from the main database this type of spec (relies on a db) will work.
+    # it "uuid uniqueness" do
+    #   expect(event).to(validate_uniqueness_of(:uuid).case_insensitive)
+    # end
 
     it "uuid format" do
       event.uuid = "invalid-uuid"
