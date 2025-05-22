@@ -44,4 +44,59 @@ RSpec.describe(EventIndexHandler, type: :concern) do
       end
     end
   end
+
+  describe ".doi" do
+    let(:proxy_identifiers) { ["00.0000/zenodo.0000", "01.0001/zenodo.0001"] }
+    let(:event) { build(:event) }
+
+    describe "when dois are valid" do
+      it "when subj_hash has 'proxyIdentifiers' adds to doi" do
+        event.subj_id = nil
+        event.obj_id = nil
+        event.subj = { "proxyIdentifiers": ["10.0000/zenodo.0000", "10.0000/zenodo.0001"] }.to_json
+
+        expect(event.doi).to(eq(["10.0000/zenodo.0000", "10.0000/zenodo.0001"]))
+      end
+
+      it "when obj_hash has 'proxyIdentifiers' adds to doi" do
+        event.subj_id = nil
+        event.obj_id = nil
+        event.obj = { "proxyIdentifiers": ["10.0000/zenodo.0000", "10.0000/zenodo.0001"] }.to_json
+
+        expect(event.doi).to(eq(["10.0000/zenodo.0000", "10.0000/zenodo.0001"]))
+      end
+
+      it "when subj_hash has 'funder' adds to doi" do
+        funders = [{ "@id" => "10.0000/zenodo.0000" }, { "@id" => "10.0001/zenodo.0001" }]
+        event.subj_id = nil
+        event.obj_id = nil
+        event.subj = { "funder": funders }.to_json
+
+        expect(event.doi).to(eq(["10.0000/zenodo.0000", "10.0001/zenodo.0001"]))
+      end
+
+      it "when obj_hash has 'funder' adds to doi" do
+        funders = [{ "@id" => "10.0000/zenodo.0000" }, { "@id" => "10.0001/zenodo.0001" }]
+        event.subj_id = nil
+        event.obj_id = nil
+        event.obj = { "funder": funders }.to_json
+
+        expect(event.doi).to(eq(["10.0000/zenodo.0000", "10.0001/zenodo.0001"]))
+      end
+
+      it "when subj_id is valid adds to doi" do
+        event.subj_id = "10.0000/zenodo.0000"
+        event.obj_id = nil
+
+        expect(event.doi).to(eq(["10.0000/zenodo.0000"]))
+      end
+
+      it "when obj_id is valid adds to doi" do
+        event.obj_id = "10.0000/zenodo.0000"
+        event.subj_id = nil
+
+        expect(event.doi).to(eq(["10.0000/zenodo.0000"]))
+      end
+    end
+  end
 end

@@ -55,11 +55,24 @@ module EventIndexHandler
     "objects/#{obj_id}-#{timestamp}"
   end
 
+  # accepts dois that start with 10. (dot)
+  # followed by 4 or five digits 10.1234 or 10.12345
+  # followed by a slash 10.1234/
+  # followed by at least one more character 10.1234/123
+  # QUESTION -> SHOULD THIS ALLOW DUPLICATE VALUES???
   def doi
-    Array.wrap(subj_hash["proxyIdentifiers"]).grep(%r{\A10\.\d{4,5}/.+\z}) { ::Regexp.last_match(1) } +
-      Array.wrap(obj_hash["proxyIdentifiers"]).grep(%r{\A10\.\d{4,5}/.+\z}) { ::Regexp.last_match(1) } +
-      Array.wrap(subj_hash["funder"]).map { |f| DoiUtilities.doi_from_url(f["@id"]) }.compact +
-      Array.wrap(obj_hash["funder"]).map { |f| DoiUtilities.doi_from_url(f["@id"]) }.compact +
+    Array.wrap(subj_hash["proxyIdentifiers"])
+      .map { |s| s[%r{\A(10\.\d{4,5}/.+)\z}, 1] }
+      .compact +
+      Array.wrap(obj_hash["proxyIdentifiers"])
+        .map { |s| s[%r{\A(10\.\d{4,5}/.+)\z}, 1] }
+        .compact +
+      Array.wrap(subj_hash["funder"])
+        .map { |f| DoiUtilities.doi_from_url(f["@id"]) }
+        .compact +
+      Array.wrap(obj_hash["funder"])
+        .map { |f| DoiUtilities.doi_from_url(f["@id"]) }
+        .compact +
       [DoiUtilities.doi_from_url(subj_id), DoiUtilities.doi_from_url(obj_id)].compact
   end
 
