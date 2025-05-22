@@ -3,7 +3,8 @@
 module EventIndexHandler
   extend ActiveSupport::Concern
 
-  # Used to prepare the event record for indexing
+  # Used to prepare the event record for indexing.
+  # Invoked implicitely when document indexing occurs.
   def as_indexed_json(_options = {})
     {
       "uuid" => uuid,

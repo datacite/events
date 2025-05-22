@@ -286,6 +286,28 @@ RSpec.describe(Event, type: :model) do
 
         expect(Rails.logger).to(have_received(:error).with("JSON parsing failed for event.subj: error"))
       end
+
+      it "returns the expected hash when subj is valid JSON" do
+        event.subj = {
+          "@id": "https://doi.org/00.0000/zenodo.00000000",
+          "@type": "Organization",
+          "name": "DataCite",
+          "location": {
+            "type": "postalAddress",
+            "addressCountry": "France",
+          },
+        }.to_json
+
+        expect(event.subj_hash).to(eql({
+          "@id" => "https://doi.org/00.0000/zenodo.00000000",
+          "@type" => "Organization",
+          "name" => "DataCite",
+          "location" => {
+            "type" => "postalAddress",
+            "addressCountry" => "France",
+          },
+        }))
+      end
     end
 
     describe "#obj_hash" do
@@ -309,6 +331,28 @@ RSpec.describe(Event, type: :model) do
         event.obj_hash
 
         expect(Rails.logger).to(have_received(:error).with("JSON parsing failed for event.obj: error"))
+      end
+
+      it "returns the expected hash when obj is valid JSON" do
+        event.obj = {
+          "@id": "https://doi.org/00.0000/zenodo.00000000",
+          "@type": "Organization",
+          "name": "DataCite",
+          "location": {
+            "type": "postalAddress",
+            "addressCountry": "France",
+          },
+        }.to_json
+
+        expect(event.obj_hash).to(eql({
+          "@id" => "https://doi.org/00.0000/zenodo.00000000",
+          "@type" => "Organization",
+          "name" => "DataCite",
+          "location" => {
+            "type" => "postalAddress",
+            "addressCountry" => "France",
+          },
+        }))
       end
     end
   end
