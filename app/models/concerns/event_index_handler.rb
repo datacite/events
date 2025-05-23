@@ -120,13 +120,14 @@ module EventIndexHandler
   end
 
   def citation_type
-    if subj_hash["@type"].blank? || subj_hash["@type"] == "CreativeWork" ||
-        obj_hash["@type"].blank? ||
-        obj_hash["@type"] == "CreativeWork"
-      return
-    end
+    creative_work = "CreativeWork"
 
-    [subj_hash["@type"], obj_hash["@type"]].compact.sort.join("-")
+    return if subj_hash["@type"].blank? ||
+      subj_hash["@type"] == creative_work ||
+      obj_hash["@type"].blank? ||
+      obj_hash["@type"] == creative_work
+
+    [subj_hash["@type"], obj_hash["@type"]].sort.join("-")
   end
 
   def registrant_id

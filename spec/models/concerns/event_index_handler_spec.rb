@@ -238,8 +238,46 @@ RSpec.describe(EventIndexHandler, type: :concern) do
       expect(event.subtype).to(contain_exactly("subj-fake-type", "obj-fake-type"))
     end
 
-    it "when subj and obj @type is missing or nil returns nil" do
+    it "when subj and obj '@type' is missing or nil returns nil" do
       expect(event.subtype).to(be_empty)
+    end
+  end
+
+  describe "citation_type" do
+    it "when subj_hash returns nil for '@type' returns nil" do
+      event.subj = nil
+      event.obj = { "@type": "fake-type" }.to_json
+
+      expect(event.citation_type).to(be_nil)
+    end
+
+    it "when subj_hash returns 'CreativeWork' for '@type' returns nil" do
+      event.subj = { "@typ": "CreativeWork" }.to_json
+      event.obj = { "@type": "fake-type" }.to_json
+
+      expect(event.citation_type).to(be_nil)
+    end
+
+    it "when obj_hash returns nil for '@type' returns nil" do
+      event.obj = nil
+      event.subj = { "@type": "fake-type" }.to_json
+
+      expect(event.citation_type).to(be_nil)
+    end
+
+    it "when obj_hash returns 'CreativeWork' for '@type' returns nil" do
+      event.obj = { "@typ": "CreativeWork" }.to_json
+      event.subj = { "@type": "fake-type" }.to_json
+
+      expect(event.citation_type).to(be_nil)
+    end
+
+    it "when obj_hash and subj_hash have valid @type values returns the correct ordered value" do
+      event.subj = { "@type": "subj-type" }.to_json
+      event.obj = { "@type": "obj-type" }.to_json
+
+      # Make sure the sort order is correct
+      expect(event.citation_type).to(eq("obj-type-subj-type"))
     end
   end
 end
