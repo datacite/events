@@ -9,7 +9,5 @@ FactoryBot.define do
     source_token { "00000000-0000-0000-0000-000000000001" }
     message_action { "create" }
     indexed_at { "2025-01-01 00:00:00" }
-    subj { nil }
-    # obj { nil }
   end
 end
