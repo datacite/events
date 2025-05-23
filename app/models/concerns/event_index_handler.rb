@@ -57,21 +57,50 @@ module EventIndexHandler
 
   # QUESTION -> SHOULD THIS ALLOW DUPLICATE VALUES???
   def doi
-    subj_proxy_identifier_dois + obj_proxy_identifier_dois + subj_funder_dois + obj_funder_dois +
-      [DoiUtilities.doi_from_url(subj_id), DoiUtilities.doi_from_url(obj_id)].compact
+    # Extract all subj proxy identifiers that match 10.()dot followed by 4 or 5 digits
+    # then followed by a slash and finally followed by at least 1 character.
+    # i.e. 10.1234/a, 10.12345/zenodo.100
+    subj_proxy_identifier_dois = Array.wrap(subj_hash["proxyIdentifiers"])
+      .map { |s| s[%r{\A(10\.\d{4,5}/.+)\z}, 1] }
+      .compact
+
+    # Extract all obj proxy identifiers that match 10.()dot followed by 4 or 5 digits
+    # then followed by a slash and finally followed by at least 1 character.
+    # i.e. 10.1234/a, 10.12345/zenodo.100
+    obj_proxy_identifier_dois = Array.wrap(obj_hash["proxyIdentifiers"])
+      .map { |s| s[%r{\A(10\.\d{4,5}/.+)\z}, 1] }
+      .compact
+
+    subj_funder_dois = Array.wrap(subj_hash["funder"])
+      .map { |f| DoiUtilities.doi_from_url(f["@id"]) }
+      .compact
+
+    obj_funder_dois = Array.wrap(obj_hash["funder"])
+      .map { |f| DoiUtilities.doi_from_url(f["@id"]) }
+      .compact
+
+    subj_id_obj_id_array = [DoiUtilities.doi_from_url(subj_id), DoiUtilities.doi_from_url(obj_id)].compact
+
+    subj_proxy_identifier_dois + obj_proxy_identifier_dois + subj_funder_dois + obj_funder_dois + subj_id_obj_id_array
   end
 
   def orcid
-    Array.wrap(subj_hash["author"]).map { |f| OrcidUtilities.orcid_from_url(f["@id"]) }.compact +
-      Array.wrap(obj_hash["author"]).map { |f| OrcidUtilities.orcid_from_url(f["@id"]) }.compact +
-      [OrcidUtilities.orcid_from_url(subj_id), OrcidUtilities.orcid_from_url(obj_id)].compact
+    subj_author_orcids = Array.wrap(subj_hash["author"])
+      .map { |f| OrcidUtilities.orcid_from_url(f["@id"]) }
+      .compact
+
+    obj_author_orcids = Array.wrap(obj_hash["author"])
+      .map { |f| OrcidUtilities.orcid_from_url(f["@id"]) }
+      .compact
+
+    subj_id_obj_id_orcids = [OrcidUtilities.orcid_from_url(subj_id), OrcidUtilities.orcid_from_url(obj_id)].compact
+
+    subj_author_orcids + obj_author_orcids + subj_id_obj_id_orcids
   end
 
   def issn
     Array.wrap(subj_hash.dig("periodical", "issn")).compact +
       Array.wrap(obj_hash.dig("periodical", "issn")).compact
-  rescue TypeError
-    nil
   end
 
   def prefix
@@ -146,37 +175,5 @@ module EventIndexHandler
 
   def date_published(doi)
     Doi.publication_date(doi)
-  end
-
-  private
-
-  def subj_proxy_identifier_dois
-    # Extract all subj proxy identifiers that match 10.()dot followed by 4 or 5 digits
-    # then followed by a slash and finally followed by at least 1 character.
-    # i.e. 10.1234/a, 10.12345/zenodo.100
-    Array.wrap(subj_hash["proxyIdentifiers"])
-      .map { |s| s[%r{\A(10\.\d{4,5}/.+)\z}, 1] }
-      .compact
-  end
-
-  def obj_proxy_identifier_dois
-    # Extract all obj proxy identifiers that match 10.()dot followed by 4 or 5 digits
-    # then followed by a slash and finally followed by at least 1 character.
-    # i.e. 10.1234/a, 10.12345/zenodo.100
-    Array.wrap(obj_hash["proxyIdentifiers"])
-      .map { |s| s[%r{\A(10\.\d{4,5}/.+)\z}, 1] }
-      .compact
-  end
-
-  def subj_funder_dois
-    Array.wrap(subj_hash["funder"])
-      .map { |f| DoiUtilities.doi_from_url(f["@id"]) }
-      .compact
-  end
-
-  def obj_funder_dois
-    Array.wrap(obj_hash["funder"])
-      .map { |f| DoiUtilities.doi_from_url(f["@id"]) }
-      .compact
   end
 end

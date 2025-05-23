@@ -5,9 +5,10 @@ require "rails_helper"
 RSpec.describe(EventIndexHandler, type: :concern) do
   include ActiveSupport::Testing::TimeHelpers
 
+  let(:event) { build(:event) }
+
   describe ".subj_cache_key" do
     it "when subj_hash has 'dateModified' returns expected result" do
-      event = build(:event)
       event.subj_id = "00.0000/zenodo.00000000"
       event.subj = { "dateModified": "2025-01-01 00:00:00" }.to_json
 
@@ -16,7 +17,6 @@ RSpec.describe(EventIndexHandler, type: :concern) do
 
     it "when subj_hash does not have a 'dateModified' returns expected result" do
       travel_to(Time.zone.parse("2025-01-01T00:00:00Z")) do
-        event = build(:event)
         event.subj_id = "00.0000/zenodo.00000000"
         event.subj = { "key": "value" }.to_json
 
@@ -27,7 +27,6 @@ RSpec.describe(EventIndexHandler, type: :concern) do
 
   describe ".obj_cache_key" do
     it "when obj_hash has 'dateModified' returns expected result" do
-      event = build(:event)
       event.obj_id = "00.0000/zenodo.00000000"
       event.obj = { "dateModified": "2025-01-01 00:00:00" }.to_json
 
@@ -36,7 +35,6 @@ RSpec.describe(EventIndexHandler, type: :concern) do
 
     it "when obj_hash does not have a 'dateModified' returns expected result" do
       travel_to(Time.zone.parse("2025-01-01T00:00:00Z")) do
-        event = build(:event)
         event.obj_id = "00.0000/zenodo.00000000"
         event.obj = { "key": "value" }.to_json
 
@@ -46,9 +44,6 @@ RSpec.describe(EventIndexHandler, type: :concern) do
   end
 
   describe ".doi" do
-    let(:proxy_identifiers) { ["00.0000/zenodo.0000", "01.0001/zenodo.0001"] }
-    let(:event) { build(:event) }
-
     describe "when dois are valid" do
       it "when subj_hash has 'proxyIdentifiers' adds to doi" do
         event.subj_id = nil
@@ -67,7 +62,11 @@ RSpec.describe(EventIndexHandler, type: :concern) do
       end
 
       it "when subj_hash has 'funder' adds to doi" do
-        funders = [{ "@id" => "10.0000/zenodo.0000" }, { "@id" => "10.0001/zenodo.0001" }]
+        funders = [
+          { "@id": "10.0000/zenodo.0000" },
+          { "@id": "10.0001/zenodo.0001" },
+        ]
+
         event.subj_id = nil
         event.obj_id = nil
         event.subj = { "funder": funders }.to_json
@@ -76,7 +75,11 @@ RSpec.describe(EventIndexHandler, type: :concern) do
       end
 
       it "when obj_hash has 'funder' adds to doi" do
-        funders = [{ "@id" => "10.0000/zenodo.0000" }, { "@id" => "10.0001/zenodo.0001" }]
+        funders = [
+          { "@id": "10.0000/zenodo.0000" },
+          { "@id": "10.0001/zenodo.0001" },
+        ]
+
         event.subj_id = nil
         event.obj_id = nil
         event.obj = { "funder": funders }.to_json
@@ -84,19 +87,101 @@ RSpec.describe(EventIndexHandler, type: :concern) do
         expect(event.doi).to(eq(["10.0000/zenodo.0000", "10.0001/zenodo.0001"]))
       end
 
-      it "when subj_id is valid adds to doi" do
+      it "when 'subj_id' is a doi adds to doi" do
         event.subj_id = "10.0000/zenodo.0000"
         event.obj_id = nil
 
         expect(event.doi).to(eq(["10.0000/zenodo.0000"]))
       end
 
-      it "when obj_id is valid adds to doi" do
+      it "when 'obj_id' is a doi adds to doi" do
         event.obj_id = "10.0000/zenodo.0000"
         event.subj_id = nil
 
         expect(event.doi).to(eq(["10.0000/zenodo.0000"]))
       end
+
+      it "when all values do not have valid dois returns empty array" do
+        funders = [{ "@id": "http://fake-doi/this-will-not-resolve" }]
+
+        event.subj_id = "http://fake-doi/this-will-not-resolve"
+        event.obj_id = "http://fake-doi/this-will-not-resolve"
+        event.subj = { "funder": funders }.to_json
+        event.obj = { "funder": funders }.to_json
+
+        expect(event.doi).to(eq([]))
+      end
+    end
+  end
+
+  describe ".orcid" do
+    it "when subj has 'author' adds to orcid" do
+      authors = [
+        { "@id": "https://orcid.org/0000-0000-0000-0000" },
+        { "@id": "https://orcid.org/0001-0001-0001-0001" },
+      ]
+
+      event.subj_id = nil
+      event.obj_id = nil
+      event.subj = { "author": authors }.to_json
+
+      expect(event.orcid).to(eq(["0000-0000-0000-0000", "0001-0001-0001-0001"]))
+    end
+
+    it "when obj has 'author' adds to orcid" do
+      authors = [
+        { "@id" => "https://orcid.org/0000-0000-0000-0000" },
+        { "@id" => "https://orcid.org/0001-0001-0001-0001" },
+      ]
+
+      event.subj_id = nil
+      event.obj_id = nil
+      event.obj = { "author": authors }.to_json
+
+      expect(event.orcid).to(eq(["0000-0000-0000-0000", "0001-0001-0001-0001"]))
+    end
+
+    it "when 'subj_id' is an orcid adds to orcid" do
+      event.subj_id = "https://orcid.org/0000-0000-0000-0000"
+      event.obj_id = nil
+
+      expect(event.orcid).to(eq(["0000-0000-0000-0000"]))
+    end
+
+    it "when 'obj_id' is an orcid adds to orcid" do
+      event.subj_id = nil
+      event.obj_id = "https://orcid.org/0000-0000-0000-0000"
+
+      expect(event.orcid).to(eq(["0000-0000-0000-0000"]))
+    end
+
+    it "when all values do not have valid dois returns empty array" do
+      authors = [{ "@id": "http://fake-orcid/this-will-not-resolve" }]
+
+      event.subj_id = "http://fake-orcid/this-will-not-resolve"
+      event.obj_id = "http://fake-orcid/this-will-not-resolve"
+      event.subj = { "author": authors }.to_json
+      event.obj = { "author": authors }.to_json
+
+      expect(event.orcid).to(eq([]))
+    end
+  end
+
+  describe ".issn" do
+    it "when subj has 'periodical' containing 'issn' adds to issn" do
+      event.subj = { "periodical": { "issn": "fake-issn" } }.to_json
+
+      expect(event.issn).to(eq(["fake-issn"]))
+    end
+
+    it "when obj has 'periodical' containing 'issn' adds to issn" do
+      event.obj = { "periodical": { "issn": "fake-issn" } }.to_json
+
+      expect(event.issn).to(eq(["fake-issn"]))
+    end
+
+    it "when subj does not contain an issn and obj does not contain an issn returns an empty array" do
+      expect(event.issn).to(eq([]))
     end
   end
 end
