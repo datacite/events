@@ -313,8 +313,6 @@ RSpec.describe(EventIndexHandler, type: :concern) do
 
   describe ".access_method" do
     it "when 'relation_type_id' is blank it returns nil" do
-      event.relation_type_id = nil
-
       expect(event.access_method).to(be_nil)
     end
 
@@ -334,6 +332,30 @@ RSpec.describe(EventIndexHandler, type: :concern) do
       event.relation_type_id = "a-investigations-value"
 
       expect(event.access_method).to(eq("value"))
+    end
+  end
+
+  describe ".metric_type" do
+    it "when 'relation_type_id' is blank returns nil" do
+      expect(event.metric_type).to(be_nil)
+    end
+
+    it "when 'relation_type_id' does not contain 'requests' returns nil" do
+      event.relation_type_id = "not-a-valid-relation-type-id"
+
+      expect(event.metric_type).to(be_nil)
+    end
+
+    it "when 'relation_type_id' contains 'requests' returns the correct result" do
+      event.relation_type_id = "one-two-three-requests"
+
+      expect(event.metric_type).to(eq("one-two-three"))
+    end
+
+    it "when 'relation_type_id' contains 'investigations' returns the correct result" do
+      event.relation_type_id = "one-two-three-investigations"
+
+      expect(event.metric_type).to(eq("one-two-three"))
     end
   end
 end

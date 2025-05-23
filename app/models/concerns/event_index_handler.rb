@@ -148,10 +148,11 @@ module EventIndexHandler
   end
 
   def metric_type
-    if /(requests|investigations)/.match?(relation_type_id.to_s)
-      arr = relation_type_id.split("-", 4)
-      arr[0..2].join("-")
-    end
+    return if relation_type_id.blank?
+
+    return if relation_type_id.exclude?("requests") && relation_type_id.exclude?("investigations")
+
+    relation_type_id.split("-")[0..2].join("-")
   end
 
   def year_month
