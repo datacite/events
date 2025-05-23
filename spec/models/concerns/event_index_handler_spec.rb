@@ -185,7 +185,7 @@ RSpec.describe(EventIndexHandler, type: :concern) do
     end
   end
 
-  describe "prefix" do
+  describe ".prefix" do
     it "when doi has dois returns the prefix of each doi" do
       event.subj_id = "10.0000/0000"
       event.obj_id = "10.0001/0001"
@@ -218,7 +218,7 @@ RSpec.describe(EventIndexHandler, type: :concern) do
     end
   end
 
-  describe "subtype" do
+  describe ".subtype" do
     it "when subj has a '@type' adds it to the subtype array" do
       event.subj = { "@type": "subj-fake-type" }.to_json
 
@@ -243,7 +243,7 @@ RSpec.describe(EventIndexHandler, type: :concern) do
     end
   end
 
-  describe "citation_type" do
+  describe ".citation_type" do
     it "when subj_hash returns nil for '@type' returns nil" do
       event.subj = nil
       event.obj = { "@type": "fake-type" }.to_json
@@ -278,6 +278,36 @@ RSpec.describe(EventIndexHandler, type: :concern) do
 
       # Make sure the sort order is correct
       expect(event.citation_type).to(eq("obj-type-subj-type"))
+    end
+  end
+
+  describe ".registrant_id" do
+    it "when subj_hash has a non-nil 'registrantId' adds to array result" do
+      event.subj = { "registrantId": "subj-registrant-id" }.to_json
+
+      expect(event.registrant_id).to(contain_exactly("subj-registrant-id"))
+    end
+
+    it "when obj_hash has a non-nil 'registrantId' adds to array result" do
+      event.obj = { "registrantId": "obj-registrant-id" }.to_json
+
+      expect(event.registrant_id).to(contain_exactly("obj-registrant-id"))
+    end
+
+    it "when subj_hash has a non-nil 'providerId' adds to array result" do
+      event.subj = { "providerId": "subj-provider-id" }.to_json
+
+      expect(event.registrant_id).to(contain_exactly("subj-provider-id"))
+    end
+
+    it "when obj_hash has a non-nil 'providerId' adds to array result" do
+      event.obj = { "providerId": "obj-provider-id" }.to_json
+
+      expect(event.registrant_id).to(contain_exactly("obj-provider-id"))
+    end
+
+    it "when obj_hash and subj_hash both do not contain a 'registrantId' and a 'providerId' returns an empty array" do
+      expect(event.registrant_id).to(be_empty)
     end
   end
 end
