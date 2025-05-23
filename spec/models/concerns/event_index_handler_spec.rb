@@ -109,7 +109,7 @@ RSpec.describe(EventIndexHandler, type: :concern) do
         event.subj = { "funder": funders }.to_json
         event.obj = { "funder": funders }.to_json
 
-        expect(event.doi).to(eq([]))
+        expect(event.doi).to(be_empty)
       end
     end
   end
@@ -163,7 +163,7 @@ RSpec.describe(EventIndexHandler, type: :concern) do
       event.subj = { "author": authors }.to_json
       event.obj = { "author": authors }.to_json
 
-      expect(event.orcid).to(eq([]))
+      expect(event.orcid).to(be_empty)
     end
   end
 
@@ -181,7 +181,7 @@ RSpec.describe(EventIndexHandler, type: :concern) do
     end
 
     it "when subj does not contain an issn and obj does not contain an issn returns an empty array" do
-      expect(event.issn).to(eq([]))
+      expect(event.issn).to(be_empty)
     end
   end
 
@@ -214,7 +214,32 @@ RSpec.describe(EventIndexHandler, type: :concern) do
       event.subj_id = nil
       event.obj_id = nil
 
-      expect(event.prefix.flatten).to(eq([]))
+      expect(event.prefix.flatten).to(be_empty)
+    end
+  end
+
+  describe "subtype" do
+    it "when subj has a '@type' adds it to the subtype array" do
+      event.subj = { "@type": "subj-fake-type" }.to_json
+
+      expect(event.subtype).to(contain_exactly("subj-fake-type"))
+    end
+
+    it "when obj has a '@type' adds it to the subtype array" do
+      event.obj = { "@type": "obj-fake-type" }.to_json
+
+      expect(event.subtype).to(contain_exactly("obj-fake-type"))
+    end
+
+    it "when subj and obj have a '@type' adds it to the subtype array" do
+      event.subj = { "@type": "subj-fake-type" }.to_json
+      event.obj = { "@type": "obj-fake-type" }.to_json
+
+      expect(event.subtype).to(contain_exactly("subj-fake-type", "obj-fake-type"))
+    end
+
+    it "when subj and obj @type is missing or nil returns nil" do
+      expect(event.subtype).to(be_empty)
     end
   end
 end

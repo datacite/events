@@ -116,7 +116,7 @@ module EventIndexHandler
   end
 
   def subtype
-    [subj_hash["@type"], obj["@type"]].compact
+    [subj_hash["@type"], obj_hash["@type"]].compact
   end
 
   def citation_type
