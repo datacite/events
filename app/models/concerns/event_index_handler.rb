@@ -55,7 +55,7 @@ module EventIndexHandler
     "objects/#{obj_id}-#{timestamp}"
   end
 
-  # QUESTION -> SHOULD THIS ALLOW DUPLICATE VALUES???
+  # TODO: SHOULD THIS ALLOW DUPLICATE VALUES???
   def doi
     # Extract all subj proxy identifiers that match 10.()dot followed by 4 or 5 digits
     # then followed by a slash and finally followed by at least 1 character.
@@ -103,8 +103,16 @@ module EventIndexHandler
       Array.wrap(obj_hash.dig("periodical", "issn")).compact
   end
 
+  # TODO: WHY IS THIS AN ARRAY OF ARRAYS?
+  #       CAN WE CHANGE THIS TO BE A SIMPLE SINGLE ARRAY?
+  # TODO: THE to_s CALL IS DONE BECAUSE OF THE EXISTING BUG
+  #       THAT ALLOWS NULL VALUES. IF WE CHANGE THIS AND CLEAN
+  #       THE DATA WE COULD REMOVE THIS CALL IN THE FUTURE.
   def prefix
-    [doi.map { |d| d.to_s.split("/", 2).first }].compact
+    # Loop through all dois in the doi array
+    # Split each doi at the first slash -> /
+    # And return the first element in that array i.e. the prefix
+    [doi.map { |d| d.split("/", 2).first }].compact
   end
 
   def subtype

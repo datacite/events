@@ -184,4 +184,37 @@ RSpec.describe(EventIndexHandler, type: :concern) do
       expect(event.issn).to(eq([]))
     end
   end
+
+  describe "prefix" do
+    it "when doi has dois returns the prefix of each doi" do
+      event.subj_id = "10.0000/0000"
+      event.obj_id = "10.0001/0001"
+
+      event.subj = {
+        "proxyIdentifiers": ["10.0002/0002"],
+        "funder": [{ "@id": "10.0003/0003" }],
+      }.to_json
+
+      event.obj = {
+        "proxyIdentifiers": ["10.0004/0004"],
+        "funder": [{ "@id": "10.0005/0005" }],
+      }.to_json
+
+      expect(event.prefix.flatten).to(contain_exactly(
+        "10.0000",
+        "10.0001",
+        "10.0002",
+        "10.0003",
+        "10.0004",
+        "10.0005",
+      ))
+    end
+
+    it "when doi is an empty array returns an empty array" do
+      event.subj_id = nil
+      event.obj_id = nil
+
+      expect(event.prefix.flatten).to(eq([]))
+    end
+  end
 end
