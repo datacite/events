@@ -3,7 +3,8 @@
 module EventIndexHandler
   extend ActiveSupport::Concern
 
-  # Used to prepare the event record for indexing
+  # Used to prepare the event record for indexing.
+  # Invoked implicitely when document indexing occurs.
   def as_indexed_json(_options = {})
     {
       "uuid" => uuid,
@@ -54,43 +55,79 @@ module EventIndexHandler
     "objects/#{obj_id}-#{timestamp}"
   end
 
+  # TODO: SHOULD THIS ALLOW DUPLICATE VALUES???
   def doi
-    Array.wrap(subj_hash["proxyIdentifiers"]).grep(%r{\A10\.\d{4,5}/.+\z}) { ::Regexp.last_match(1) } +
-      Array.wrap(obj_hash["proxyIdentifiers"]).grep(%r{\A10\.\d{4,5}/.+\z}) { ::Regexp.last_match(1) } +
-      Array.wrap(subj_hash["funder"]).map { |f| DoiUtilities.doi_from_url(f["@id"]) }.compact +
-      Array.wrap(obj_hash["funder"]).map { |f| DoiUtilities.doi_from_url(f["@id"]) }.compact +
-      [DoiUtilities.doi_from_url(subj_id), DoiUtilities.doi_from_url(obj_id)].compact
+    # Extract all subj proxy identifiers that match 10.()dot followed by 4 or 5 digits
+    # then followed by a slash and finally followed by at least 1 character.
+    # i.e. 10.1234/a, 10.12345/zenodo.100
+    subj_proxy_identifier_dois = Array.wrap(subj_hash["proxyIdentifiers"])
+      .map { |s| s[%r{\A(10\.\d{4,5}/.+)\z}, 1] }
+      .compact
+
+    # Extract all obj proxy identifiers that match 10.()dot followed by 4 or 5 digits
+    # then followed by a slash and finally followed by at least 1 character.
+    # i.e. 10.1234/a, 10.12345/zenodo.100
+    obj_proxy_identifier_dois = Array.wrap(obj_hash["proxyIdentifiers"])
+      .map { |s| s[%r{\A(10\.\d{4,5}/.+)\z}, 1] }
+      .compact
+
+    subj_funder_dois = Array.wrap(subj_hash["funder"])
+      .map { |f| DoiUtilities.doi_from_url(f["@id"]) }
+      .compact
+
+    obj_funder_dois = Array.wrap(obj_hash["funder"])
+      .map { |f| DoiUtilities.doi_from_url(f["@id"]) }
+      .compact
+
+    subj_id_obj_id_array = [DoiUtilities.doi_from_url(subj_id), DoiUtilities.doi_from_url(obj_id)].compact
+
+    subj_proxy_identifier_dois + obj_proxy_identifier_dois + subj_funder_dois + obj_funder_dois + subj_id_obj_id_array
   end
 
   def orcid
-    Array.wrap(subj_hash["author"]).map { |f| OrcidUtilities.orcid_from_url(f["@id"]) }.compact +
-      Array.wrap(obj_hash["author"]).map { |f| OrcidUtilities.orcid_from_url(f["@id"]) }.compact +
-      [OrcidUtilities.orcid_from_url(subj_id), OrcidUtilities.orcid_from_url(obj_id)].compact
+    subj_author_orcids = Array.wrap(subj_hash["author"])
+      .map { |f| OrcidUtilities.orcid_from_url(f["@id"]) }
+      .compact
+
+    obj_author_orcids = Array.wrap(obj_hash["author"])
+      .map { |f| OrcidUtilities.orcid_from_url(f["@id"]) }
+      .compact
+
+    subj_id_obj_id_orcids = [OrcidUtilities.orcid_from_url(subj_id), OrcidUtilities.orcid_from_url(obj_id)].compact
+
+    subj_author_orcids + obj_author_orcids + subj_id_obj_id_orcids
   end
 
   def issn
     Array.wrap(subj_hash.dig("periodical", "issn")).compact +
       Array.wrap(obj_hash.dig("periodical", "issn")).compact
-  rescue TypeError
-    nil
   end
 
+  # TODO: WHY IS THIS AN ARRAY OF ARRAYS?
+  #       CAN WE CHANGE THIS TO BE A SIMPLE SINGLE ARRAY?
+  # TODO: THE to_s CALL IS DONE BECAUSE OF THE EXISTING BUG
+  #       THAT ALLOWS NULL VALUES. IF WE CHANGE THIS AND CLEAN
+  #       THE DATA WE COULD REMOVE THIS CALL IN THE FUTURE.
   def prefix
-    [doi.map { |d| d.to_s.split("/", 2).first }].compact
+    # Loop through all dois in the doi array
+    # Split each doi at the first slash -> /
+    # And return the first element in that array i.e. the prefix
+    [doi.map { |d| d.split("/", 2).first }].compact
   end
 
   def subtype
-    [subj_hash["@type"], obj["@type"]].compact
+    [subj_hash["@type"], obj_hash["@type"]].compact
   end
 
   def citation_type
-    if subj_hash["@type"].blank? || subj_hash["@type"] == "CreativeWork" ||
-        obj_hash["@type"].blank? ||
-        obj_hash["@type"] == "CreativeWork"
-      return
-    end
+    creative_work = "CreativeWork"
 
-    [subj_hash["@type"], obj_hash["@type"]].compact.sort.join("-")
+    return if subj_hash["@type"].blank? ||
+      subj_hash["@type"] == creative_work ||
+      obj_hash["@type"].blank? ||
+      obj_hash["@type"] == creative_work
+
+    [subj_hash["@type"], obj_hash["@type"]].sort.join("-")
   end
 
   def registrant_id
@@ -103,16 +140,19 @@ module EventIndexHandler
   end
 
   def access_method
-    if /(requests|investigations)/.match?(relation_type_id.to_s)
-      relation_type_id.split("-").last if relation_type_id.present?
-    end
+    return if relation_type_id.blank?
+
+    return if relation_type_id.exclude?("requests") && relation_type_id.exclude?("investigations")
+
+    relation_type_id.split("-").last
   end
 
   def metric_type
-    if /(requests|investigations)/.match?(relation_type_id.to_s)
-      arr = relation_type_id.split("-", 4)
-      arr[0..2].join("-")
-    end
+    return if relation_type_id.blank?
+
+    return if relation_type_id.exclude?("requests") && relation_type_id.exclude?("investigations")
+
+    relation_type_id.split("-")[0..2].join("-")
   end
 
   def year_month
