@@ -140,9 +140,11 @@ module EventIndexHandler
   end
 
   def access_method
-    if /(requests|investigations)/.match?(relation_type_id.to_s)
-      relation_type_id.split("-").last if relation_type_id.present?
-    end
+    return if relation_type_id.blank?
+
+    return if relation_type_id.exclude?("requests") && relation_type_id.exclude?("investigations")
+
+    relation_type_id.split("-").last
   end
 
   def metric_type
