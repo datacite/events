@@ -55,24 +55,9 @@ module EventIndexHandler
     "objects/#{obj_id}-#{timestamp}"
   end
 
-  # accepts dois that start with 10. (dot)
-  # followed by 4 or five digits 10.1234 or 10.12345
-  # followed by a slash 10.1234/
-  # followed by at least one more character 10.1234/123
   # QUESTION -> SHOULD THIS ALLOW DUPLICATE VALUES???
   def doi
-    Array.wrap(subj_hash["proxyIdentifiers"])
-      .map { |s| s[%r{\A(10\.\d{4,5}/.+)\z}, 1] }
-      .compact +
-      Array.wrap(obj_hash["proxyIdentifiers"])
-        .map { |s| s[%r{\A(10\.\d{4,5}/.+)\z}, 1] }
-        .compact +
-      Array.wrap(subj_hash["funder"])
-        .map { |f| DoiUtilities.doi_from_url(f["@id"]) }
-        .compact +
-      Array.wrap(obj_hash["funder"])
-        .map { |f| DoiUtilities.doi_from_url(f["@id"]) }
-        .compact +
+    subj_proxy_identifier_dois + obj_proxy_identifier_dois + subj_funder_dois + obj_funder_dois +
       [DoiUtilities.doi_from_url(subj_id), DoiUtilities.doi_from_url(obj_id)].compact
   end
 
@@ -161,5 +146,37 @@ module EventIndexHandler
 
   def date_published(doi)
     Doi.publication_date(doi)
+  end
+
+  private
+
+  def subj_proxy_identifier_dois
+    # Extract all subj proxy identifiers that match 10.()dot followed by 4 or 5 digits
+    # then followed by a slash and finally followed by at least 1 character.
+    # i.e. 10.1234/a, 10.12345/zenodo.100
+    Array.wrap(subj_hash["proxyIdentifiers"])
+      .map { |s| s[%r{\A(10\.\d{4,5}/.+)\z}, 1] }
+      .compact
+  end
+
+  def obj_proxy_identifier_dois
+    # Extract all obj proxy identifiers that match 10.()dot followed by 4 or 5 digits
+    # then followed by a slash and finally followed by at least 1 character.
+    # i.e. 10.1234/a, 10.12345/zenodo.100
+    Array.wrap(obj_hash["proxyIdentifiers"])
+      .map { |s| s[%r{\A(10\.\d{4,5}/.+)\z}, 1] }
+      .compact
+  end
+
+  def subj_funder_dois
+    Array.wrap(subj_hash["funder"])
+      .map { |f| DoiUtilities.doi_from_url(f["@id"]) }
+      .compact
+  end
+
+  def obj_funder_dois
+    Array.wrap(obj_hash["funder"])
+      .map { |f| DoiUtilities.doi_from_url(f["@id"]) }
+      .compact
   end
 end
