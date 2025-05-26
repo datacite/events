@@ -177,7 +177,7 @@ module EventIndexHandler
       obj_hash["date_published"] ||
       (date_published(obj_id) || year_month)
 
-    [subj_publication[0..3]&.to_i, obj_publication[0..3]&.to_i].max
+    [subj_publication[0..3].to_i, obj_publication[0..3].to_i].max
   end
 
   def cache_key
