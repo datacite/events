@@ -1,17 +1,20 @@
 # frozen_string_literal: true
 
 class Event < ApplicationRecord
+  # Included Modules
   include RelationTypeHandler
   include EventIndexHandler
-  include EventFromSqsCreator
   include EventFromSqsUpdater
   include Elasticsearch::Model
+
+  # Extended Modules
+  extend EventFromSqsCreator
 
   # Attributes
   attribute :uuid, :text
   attribute :subj_id, :text
   attribute :obj_id, :text
-  attribute :aasm_state, :string
+  attribute :aasm_state, :string, default: "waiting"
   attribute :state_event, :string
   attribute :callback, :text
   attribute :error_messages, :text
@@ -30,6 +33,8 @@ class Event < ApplicationRecord
   attribute :relation_type_id, :string
   attribute :source_id, :string
   attribute :indexed_at, :datetime, default: "1970-01-01 00:00:00"
+  attribute :updated_at, :datetime
+  attribute :created_at, :datetime
 
   # Validations
   validates :uuid, presence: true, uuid_format: true, uniqueness: { case_sensitive: false, length: { maximum: 36 } }
