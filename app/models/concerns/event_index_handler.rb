@@ -187,6 +187,6 @@ module EventIndexHandler
   end
 
   def date_published(doi)
-    Doi.publication_date(doi)&.to_s
+    Doi.publication_date(doi)
   end
 end

@@ -381,7 +381,8 @@ RSpec.describe(EventIndexHandler, type: :concern) do
   end
 
   # describe ".citation_year" do
-  #   it "when 'relation_type_id' is not an included relation type or relations relation type returns an empty string" do
+  #   it "when 'relation_type_id' is not an included relation type or relations relation type
+  #       returns an empty string" do
   #     event.relation_type_id = "fake-type"
 
   #     expect(event.citation_year).to(eq(""))
@@ -413,7 +414,8 @@ RSpec.describe(EventIndexHandler, type: :concern) do
   #         expect(event.citation_year).to(eq(2025))
   #       end
 
-  #       it "when subj_hash does not have a date published value and the doi does not have a publication year return year_month" do
+  #       it "when subj_hash does not have a date published value and the doi does not have a publication year
+  #           return year_month" do
   #         event.occurred_at = Time.zone.local(2025, 1, 1, 0, 0, 0)
 
   #         expect(event.citation_year).to(eq("2025-01"))
@@ -437,6 +439,14 @@ RSpec.describe(EventIndexHandler, type: :concern) do
 
         expect(event.cache_key).to(eq(expected))
       end
+    end
+  end
+
+  describe ".date_published" do
+    it "returns the expected result" do
+      allow(Doi).to(receive(:publication_date).and_return(2025))
+
+      expect(event.date_published("fake-doi")).to(eq(2025))
     end
   end
 end
