@@ -10,8 +10,8 @@ module EventIndexHandler
       "uuid" => uuid,
       "subj_id" => subj_id,
       "obj_id" => obj_id,
-      "subj" => subj_hash.merge(cache_key: subj_cache_key),
-      "obj" => obj_hash.merge(cache_key: obj_cache_key),
+      "subj" => subj_hash.merge("cache_key" => subj_cache_key),
+      "obj" => obj_hash.merge("cache_key" => obj_cache_key),
       "source_doi" => source_doi,
       "target_doi" => target_doi,
       "source_relation_type_id" => source_relation_type_id,
@@ -103,16 +103,11 @@ module EventIndexHandler
       Array.wrap(obj_hash.dig("periodical", "issn")).compact
   end
 
-  # TODO: WHY IS THIS AN ARRAY OF ARRAYS?
-  #       CAN WE CHANGE THIS TO BE A SIMPLE SINGLE ARRAY?
-  # TODO: THE to_s CALL IS DONE BECAUSE OF THE EXISTING BUG
-  #       THAT ALLOWS NULL VALUES. IF WE CHANGE THIS AND CLEAN
-  #       THE DATA WE COULD REMOVE THIS CALL IN THE FUTURE.
   def prefix
     # Loop through all dois in the doi array
     # Split each doi at the first slash -> /
     # And return the first element in that array i.e. the prefix
-    [doi.map { |d| d.split("/", 2).first }].compact
+    doi.map { |d| d.split("/", 2).first }.compact
   end
 
   def subtype

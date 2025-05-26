@@ -1,5 +1,3 @@
-// Example of aws cli command to create a SQS message on the events queue in development
-
 aws --endpoint-url=http://localhost:4566 sqs send-message \
     --queue-url http://sqs.us-east-1.localhost.localstack.cloud:4566/000000000000/development_events \
     --message-body '{

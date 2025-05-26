@@ -14,7 +14,7 @@ class Event < ApplicationRecord
   attribute :uuid, :text
   attribute :subj_id, :text
   attribute :obj_id, :text
-  attribute :aasm_state, :string
+  attribute :aasm_state, :string, default: "waiting"
   attribute :state_event, :string
   attribute :callback, :text
   attribute :error_messages, :text
