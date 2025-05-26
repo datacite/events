@@ -1,0 +1,39 @@
+// Example of aws cli command to create a SQS message on the events queue in development
+
+aws --endpoint-url=http://localhost:4566 sqs send-message \
+    --queue-url http://sqs.us-east-1.localhost.localstack.cloud:4566/000000000000/development_events \
+    --message-body '{
+    "data": {
+        "type": "events",
+        "attributes": {
+            "messageAction": "create",
+            "sourceToken": "3bca8cf0-2b60-4b25-8c29-99f5b7dbd5b2",
+            "subjId": "https://doi.org/10.5281/zenodo.wendel32",
+            "objId": "https://doi.org/10.5281/zenodo.fabian33",
+            "relationTypeId": "references",
+            "sourceId": "orcid-affiliation",
+            "occurredAt": "2025-01-15T14:11:49.000Z",
+            "timestamp": "2025-01-15T14:11:54Z",
+            "license": "https://creativecommons.org/publicdomain/zero/1.0/",
+            "subj": {
+                "@id": "https://doi.org/10.5281/zenodo.wendel32",
+                "@type": "Organization",
+                "name": "DataCite",
+	            "dateModified": "2025-01-15T14:11:49.000Z",
+                "location": {
+                    "type": "postalAddress",
+                    "addressCountry": "France"
+                }
+            },
+            "obj": {
+                "@id": "https://doi.org/10.5281/zenodo.fabian33",
+                "@type": "Organization",
+                "name": "DataCite",
+                "location": {
+                    "type": "postalAddress",
+                    "addressCountry": "Germany"
+                }
+            }
+        }
+    }
+}'

@@ -380,49 +380,125 @@ RSpec.describe(EventIndexHandler, type: :concern) do
     end
   end
 
-  # describe ".citation_year" do
-  #   it "when 'relation_type_id' is not an included relation type or relations relation type
-  #       returns an empty string" do
-  #     event.relation_type_id = "fake-type"
+  describe ".citation_year" do
+    it "when 'relation_type_id' is not an included relation type or relations relation type
+        returns an empty string" do
+      event.relation_type_id = "fake-type"
 
-  #     expect(event.citation_year).to(eq(""))
-  #   end
+      expect(event.citation_year).to(eq(0))
+    end
 
-  #   (RelationTypes::REFERENCE_RELATION_TYPES | RelationTypes::CITATION_RELATION_TYPES).each do |relation_type|
-  #     describe "when obj_hash is empty" do
-  #       before do
-  #         event.relation_type_id = relation_type
-  #       end
+    (RelationTypes::REFERENCE_RELATION_TYPES | RelationTypes::CITATION_RELATION_TYPES).each do |relation_type|
+      describe "when obj_hash is empty" do
+        before do
+          event.relation_type_id = relation_type
+        end
 
-  #       it "when subj_hash has 'datePublished' returns the correct year" do
-  #         event.subj = { "datePublished": "2025-01-01 00:00:00" }.to_json
-  #         event.obj = nil
+        it "when subj_hash has 'datePublished' returns the correct year" do
+          event.subj = { "datePublished": "2025-01-01 00:00:00" }.to_json
 
-  #         expect(event.citation_year).to(eq(2025))
-  #       end
+          expect(event.citation_year).to(eq(2025))
+        end
 
-  #       it "when subj_hash has 'date_published' returns the correct year" do
-  #         event.subj = { "date_published": "2025-01-01 00:00:00" }.to_json
+        it "when subj_hash has 'date_published' returns the correct year" do
+          event.subj = { "date_published": "2025-01-01 00:00:00" }.to_json
 
-  #         expect(event.citation_year).to(eq(2025))
-  #       end
+          expect(event.citation_year).to(eq(2025))
+        end
 
-  #       it "when subj_hash does not have a date published value returns doi publication year" do
-  #         allow(event).to(receive(:date_published).with(event.subj_id).and_return("2025"))
-  #         allow(event).to(receive(:date_published).with(event.obj_id).and_return(nil))
+        it "when subj_hash does not have a date published value returns doi publication year" do
+          allow(event).to(receive(:date_published).with(event.subj_id).and_return("2025"))
+          allow(event).to(receive(:date_published).with(event.obj_id).and_return(nil))
 
-  #         expect(event.citation_year).to(eq(2025))
-  #       end
+          expect(event.citation_year).to(eq(2025))
+        end
 
-  #       it "when subj_hash does not have a date published value and the doi does not have a publication year
-  #           return year_month" do
-  #         event.occurred_at = Time.zone.local(2025, 1, 1, 0, 0, 0)
+        it "when subj_hash does not have a date published value and the doi does not have a publication year
+            return year_month year" do
+          event.occurred_at = Time.zone.local(2025, 1, 1, 0, 0, 0)
 
-  #         expect(event.citation_year).to(eq("2025-01"))
-  #       end
-  #     end
-  #   end
-  # end
+          expect(event.citation_year).to(eq(2025))
+        end
+
+        it "when there are no valid dates available return 0" do
+          expect(event.citation_year).to(eq(0))
+        end
+      end
+    end
+
+    (RelationTypes::REFERENCE_RELATION_TYPES | RelationTypes::CITATION_RELATION_TYPES).each do |relation_type|
+      describe "when subj_hash is empty" do
+        before do
+          event.relation_type_id = relation_type
+        end
+
+        it "when obj_hash has 'datePublished' returns the correct year" do
+          event.obj = { "datePublished": "2025-01-01 00:00:00" }.to_json
+
+          expect(event.citation_year).to(eq(2025))
+        end
+
+        it "when obj_hash has 'date_published' returns the correct year" do
+          event.obj = { "date_published": "2025-01-01 00:00:00" }.to_json
+
+          expect(event.citation_year).to(eq(2025))
+        end
+
+        it "when obj_hash does not have a date published value returns doi publication year" do
+          allow(event).to(receive(:date_published).with(event.obj_id).and_return("2025"))
+          allow(event).to(receive(:date_published).with(event.subj_id).and_return(nil))
+
+          expect(event.citation_year).to(eq(2025))
+        end
+
+        it "when obj_hash does not have a date published value and the doi does not have a publication year
+            return year_month year" do
+          event.occurred_at = Time.zone.local(2025, 1, 1, 0, 0, 0)
+
+          expect(event.citation_year).to(eq(2025))
+        end
+
+        it "when there are no valid dates available return 0" do
+          expect(event.citation_year).to(eq(0))
+        end
+      end
+    end
+
+    (RelationTypes::REFERENCE_RELATION_TYPES | RelationTypes::CITATION_RELATION_TYPES).each do |relation_type|
+      describe "when subj and obj are non-nil" do
+        before do
+          event.relation_type_id = relation_type
+        end
+
+        it "returns the max year when subj year is greater than obj year" do
+          # Testing values are subj.year_month and obj.datePublished
+
+          event.occurred_at = "2025-01-01 00:00:00"
+          event.obj = { "datePublished": "2024-01-01 00:00:00" }.to_json
+
+          expect(event.citation_year).to(eq(2025))
+        end
+
+        it "returns the max year when obj year is greater than subj year" do
+          # Testing values are subj.datePublished and obj.date_published
+
+          event.subj = { "datePublished": "2024-01-01 00:00:00" }.to_json
+          event.obj = { "date_published": "2025-01-01 00:00:00" }.to_json
+
+          expect(event.citation_year).to(eq(2025))
+        end
+
+        it "returns the max year when subj year is equal to obj year" do
+          # Testing values are subj.datePublished and obj.datePublished
+
+          event.subj = { "datePublished": "2025-01-01 00:00:00" }.to_json
+          event.obj = { "datePublished": "2025-01-02 00:00:00" }.to_json
+
+          expect(event.citation_year).to(eq(2025))
+        end
+      end
+    end
+  end
 
   describe ".cache_key" do
     it "when updated_at is present returns the expect value" do

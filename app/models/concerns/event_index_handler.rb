@@ -163,20 +163,25 @@ module EventIndexHandler
     [subj_id, obj_id].sort.join("-")
   end
 
-  # Ok let's rewrite this function
   def citation_year
     if (RelationTypes::INCLUDED_RELATION_TYPES + RelationTypes::RELATIONS_RELATION_TYPES).exclude?(relation_type_id)
-      return ""
+      return 0
     end
 
     subj_publication = subj_hash["datePublished"] ||
       subj_hash["date_published"] ||
-      (date_published(subj_id) || year_month)
+      date_published(subj_id)&.to_s ||
+      year_month ||
+      "0"
 
     obj_publication = obj_hash["datePublished"] ||
       obj_hash["date_published"] ||
-      (date_published(obj_id) || year_month)
+      date_published(obj_id)&.to_s ||
+      year_month ||
+      "0"
 
+    # Take the first four characters of each string and convert to an integer.
+    # Then return the maximum of those two integers.
     [subj_publication[0..3].to_i, obj_publication[0..3].to_i].max
   end
 

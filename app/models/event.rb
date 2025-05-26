@@ -1,11 +1,14 @@
 # frozen_string_literal: true
 
 class Event < ApplicationRecord
+  # Included Modules
   include RelationTypeHandler
   include EventIndexHandler
-  include EventFromSqsCreator
   include EventFromSqsUpdater
   include Elasticsearch::Model
+
+  # Extended Modules
+  extend EventFromSqsCreator
 
   # Attributes
   attribute :uuid, :text
