@@ -156,13 +156,14 @@ module EventIndexHandler
   end
 
   def year_month
-    occurred_at.utc.iso8601[0..6] if occurred_at.present?
+    occurred_at.utc.strftime("%Y-%m") if occurred_at.present?
   end
 
   def citation_id
     [subj_id, obj_id].sort.join("-")
   end
 
+  # Ok let's rewrite this function
   def citation_year
     if (RelationTypes::INCLUDED_RELATION_TYPES + RelationTypes::RELATIONS_RELATION_TYPES).exclude?(relation_type_id)
       return ""
@@ -176,7 +177,7 @@ module EventIndexHandler
       obj_hash["date_published"] ||
       (date_published(obj_id) || year_month)
 
-    [subj_publication[0..3].to_i, obj_publication[0..3].to_i].max
+    [subj_publication[0..3]&.to_i, obj_publication[0..3]&.to_i].max
   end
 
   def cache_key
@@ -186,6 +187,6 @@ module EventIndexHandler
   end
 
   def date_published(doi)
-    Doi.publication_date(doi)
+    Doi.publication_date(doi)&.to_s
   end
 end

@@ -358,4 +358,85 @@ RSpec.describe(EventIndexHandler, type: :concern) do
       expect(event.metric_type).to(eq("one-two-three"))
     end
   end
+
+  describe ".year_month" do
+    it "when 'occurred_at' is blank returns nil" do
+      expect(event.year_month).to(be_nil)
+    end
+
+    it "when 'occurred_at' is present returns the year and month" do
+      event.occurred_at = Time.zone.local(2025, 1, 1, 0, 0, 0)
+
+      expect(event.year_month).to(eq("2025-01"))
+    end
+  end
+
+  describe ".citation_id" do
+    it "returns the subj_id and obj_id sorted and joined by a hyphen" do
+      event.subj_id = "fake-subj-id"
+      event.obj_id = "fake-obj-id"
+
+      expect(event.citation_id).to(eq("fake-obj-id-fake-subj-id"))
+    end
+  end
+
+  # describe ".citation_year" do
+  #   it "when 'relation_type_id' is not an included relation type or relations relation type returns an empty string" do
+  #     event.relation_type_id = "fake-type"
+
+  #     expect(event.citation_year).to(eq(""))
+  #   end
+
+  #   (RelationTypes::REFERENCE_RELATION_TYPES | RelationTypes::CITATION_RELATION_TYPES).each do |relation_type|
+  #     describe "when obj_hash is empty" do
+  #       before do
+  #         event.relation_type_id = relation_type
+  #       end
+
+  #       it "when subj_hash has 'datePublished' returns the correct year" do
+  #         event.subj = { "datePublished": "2025-01-01 00:00:00" }.to_json
+  #         event.obj = nil
+
+  #         expect(event.citation_year).to(eq(2025))
+  #       end
+
+  #       it "when subj_hash has 'date_published' returns the correct year" do
+  #         event.subj = { "date_published": "2025-01-01 00:00:00" }.to_json
+
+  #         expect(event.citation_year).to(eq(2025))
+  #       end
+
+  #       it "when subj_hash does not have a date published value returns doi publication year" do
+  #         allow(event).to(receive(:date_published).with(event.subj_id).and_return("2025"))
+  #         allow(event).to(receive(:date_published).with(event.obj_id).and_return(nil))
+
+  #         expect(event.citation_year).to(eq(2025))
+  #       end
+
+  #       it "when subj_hash does not have a date published value and the doi does not have a publication year return year_month" do
+  #         event.occurred_at = Time.zone.local(2025, 1, 1, 0, 0, 0)
+
+  #         expect(event.citation_year).to(eq("2025-01"))
+  #       end
+  #     end
+  #   end
+  # end
+
+  describe ".cache_key" do
+    it "when updated_at is present returns the expect value" do
+      event.updated_at = Time.zone.local(2025, 1, 1, 0, 0, 0)
+
+      expected = "events/00000000-0000-0000-0000-000000000000-2025-01-01T00:00:00Z"
+
+      expect(event.cache_key).to(eq(expected))
+    end
+
+    it "when updated_at is blank returns the expected value" do
+      travel_to(Time.zone.parse("2025-01-01T00:00:00Z")) do
+        expected = "events/00000000-0000-0000-0000-000000000000-2025-01-01T00:00:00Z"
+
+        expect(event.cache_key).to(eq(expected))
+      end
+    end
+  end
 end
