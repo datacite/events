@@ -15,7 +15,7 @@ RSpec.describe(EventFromSqsUpdater) do
         expect(event.uuid).to(eq("00000001-0001-0001-0001-000100010001"))
       end
 
-      it "does not update the uuid value when not present in message body" do
+      it "does not update when not present in message body" do
         event = build(:event, uuid: "00000001-0001-0001-0001-000100010001")
         message = {}
         event.update_instance_from_sqs(message)
@@ -33,7 +33,7 @@ RSpec.describe(EventFromSqsUpdater) do
         expect(event.source_id).to(eq("datacite-crossref"))
       end
 
-      it "does not update the source_id value when not present in message body" do
+      it "does not update when not present in message body" do
         event = build(:event, source_id: "orcid-affiliation")
         message = {}
         event.update_instance_from_sqs(message)
@@ -51,7 +51,7 @@ RSpec.describe(EventFromSqsUpdater) do
         expect(event.source_token).to(eq("00020002-0002-0002-0002-000200020002"))
       end
 
-      it "does not update the source_token value when not present in message body" do
+      it "does not update when not present in message body" do
         event = build(:event, source_token: "00010001-0001-0001-0001-000100010001")
         message = {}
         event.update_instance_from_sqs(message)
@@ -69,7 +69,7 @@ RSpec.describe(EventFromSqsUpdater) do
         expect(event.total).to(eq(1000))
       end
 
-      it "does not update the total value when not present in message body" do
+      it "does not update when not present in message body" do
         event = build(:event, total: 100)
         message = {}
         event.update_instance_from_sqs(message)
@@ -87,7 +87,7 @@ RSpec.describe(EventFromSqsUpdater) do
         expect(event.occurred_at.strftime("%Y-%m-%d %H:%M:%S")).to(eq("2025-01-02 00:00:00"))
       end
 
-      it "does not update the occurred_at value when not present in message body" do
+      it "does not update when not present in message body" do
         event = build(:event, occurred_at: "2025-01-01 00:00:00")
         message = {}
         event.update_instance_from_sqs(message)
@@ -105,7 +105,7 @@ RSpec.describe(EventFromSqsUpdater) do
         expect(event.relation_type_id).to(eq("datacite-crossref"))
       end
 
-      it "does not update the relation_type_id value when not present in message body" do
+      it "does not update when not present in message body" do
         event = build(:event, relation_type_id: "orcid-affiliation")
         message = {}
         event.update_instance_from_sqs(message)
@@ -123,7 +123,7 @@ RSpec.describe(EventFromSqsUpdater) do
         expect(event.license).to(eq("https://fakelicense.org/publicdomain/zero/1.0/"))
       end
 
-      it "does not update the license value when not present in message body" do
+      it "does not update when not present in message body" do
         event = build(:event, license: "https://creativecommons.org/publicdomain/zero/1.0/")
         message = {}
         event.update_instance_from_sqs(message)
