@@ -34,6 +34,7 @@ class Event < ApplicationRecord
   attribute :source_id, :string
   attribute :indexed_at, :datetime, default: "1970-01-01 00:00:00"
   attribute :updated_at, :datetime
+  attribute :created_at, :datetime
 
   # Validations
   validates :uuid, presence: true, uuid_format: true, uniqueness: { case_sensitive: false, length: { maximum: 36 } }
