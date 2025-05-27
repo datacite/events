@@ -11,7 +11,7 @@ class EventImportWorker
     event_data = event_data(data)
 
     if event_data.nil?
-      Rails.logger.info("#{log_prefix} Message data was blank")
+      Rails.logger.error("#{log_prefix} Message data was blank")
       return
     end
 
@@ -36,6 +36,8 @@ class EventImportWorker
   # Returns the SQS event data as a hash.
   # Will return nil if either a data or attributes field is missing.
   def event_data(data)
+    return if data.blank?
+
     data_hash = JSON.parse(data)
 
     data_hash.dig("data", "attributes")
@@ -61,26 +63,26 @@ class EventImportWorker
   end
 
   def create_event(event_data, log_prefix, log_identifier)
-    Rails.logger.info("#{log_prefix} Creating a new event for #{log_identifier}")
+    Rails.logger.info("#{log_prefix} Creating event with #{log_identifier}")
 
     event = Event.create_instance_from_sqs(event_data)
 
     if event.save
-      Rails.logger.info("#{log_prefix} Event successfully created for #{log_identifier}")
+      Rails.logger.info("#{log_prefix} Successfully created event with #{log_identifier}")
     elsif event.errors.any?
-      Rails.logger.error("#{log_prefix} Creating event failed for #{log_identifier}: #{event.errors.inspect}")
+      Rails.logger.error("#{log_prefix} Failed to create event with #{log_identifier}: #{event.errors.inspect}")
     end
   end
 
   def update_event(event, event_data, log_prefix, log_identifier)
-    Rails.logger.info("#{log_prefix} Update an existing event for #{log_identifier}")
+    Rails.logger.info("#{log_prefix} Updating event with #{log_identifier}")
 
     event.update_instance_from_sqs(event_data)
 
     if event.save
-      Rails.logger.info("#{log_prefix} Event successfully updated for #{log_identifier}")
+      Rails.logger.info("#{log_prefix} Successfully updated event with #{log_identifier}")
     else
-      Rails.logger.error("#{log_prefix} Updating event failed for #{log_identifier}: #{event.errors.inspect}")
+      Rails.logger.error("#{log_prefix} Failed to updated event with #{log_identifier}: #{event.errors.inspect}")
     end
   end
 end
