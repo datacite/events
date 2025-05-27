@@ -1,5 +1,7 @@
 # DataCite Events Service
 
+[![Coverage Status](https://coveralls.io/repos/github/datacite/events/badge.svg?branch=main)](https://coveralls.io/github/datacite/events?branch=main)
+
 This is the code repository for the DataCite Events REST API.
 
 ### Adding new Shoryuken workers
