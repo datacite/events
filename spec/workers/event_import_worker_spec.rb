@@ -109,6 +109,8 @@ RSpec.describe(EventImportWorker, type: :worker) do
     it "logs the initial creating 'info' message" do
       allow(Rails.logger).to(receive(:info))
 
+      allow(event).to(receive(:save).and_return(true))
+
       worker.send(:create_event, valid_event_data, log_prefix, log_identifier)
 
       expect(Rails.logger)
