@@ -22,15 +22,74 @@ RSpec.describe(EventImportWorker, type: :worker) do
     "subj_id: subj-id, obj_id: obj-id, source_id: source-id, relation_type_id: relation-type-id"
   end
 
-  # describe ".perform" do
-  #   let(:worker) { described_class.new }
+  describe ".perform" do
+    let(:worker) { described_class.new }
 
-  #   it "when data is nil logs error" do
-  #     worker.perform(nil, nil)
+    it "when data is nil logs error" do
+      allow(Rails.logger).to(receive(:error))
 
-  #     expect(Rails.logger).to(have_received(:error).with("[Events:EventImportWorker] Message data was blank"))
-  #   end
-  # end
+      worker.perform(nil, nil)
+
+      expect(Rails.logger).to(have_received(:error).with("[Events:EventImportWorker] Message data was blank"))
+    end
+
+    it "when event data is valid builds log identifier" do
+      allow(Rails.logger).to(receive(:info))
+
+      allow(worker).to(receive_messages(
+        event_data: {},
+        log_identifier: "log_identifier",
+      ))
+
+      worker.perform(nil, valid_event_data.to_json)
+
+      expect(worker).to(have_received(:log_identifier))
+    end
+
+    it "when event data is valid searchs for an existing event" do
+      allow(Rails.logger).to(receive(:info))
+
+      allow(worker).to(receive_messages(
+        event_data: {},
+        log_identifier: "log_identifier",
+        find_event: nil,
+      ))
+
+      worker.perform(nil, valid_event_data.to_json)
+
+      expect(worker).to(have_received(:log_identifier))
+    end
+
+    it "when event data is valid and no event is found sends 'create_event'" do
+      allow(Rails.logger).to(receive(:info))
+
+      allow(worker).to(receive_messages(
+        event_data: {},
+        log_identifier: "log_identifier",
+        find_event: nil,
+        create_event: nil,
+      ))
+
+      worker.perform(nil, valid_event_data.to_json)
+
+      expect(worker).to(have_received(:create_event))
+    end
+
+    it "when event data is valid and an event is found sends 'update_event'" do
+      allow(Rails.logger).to(receive(:info))
+
+      allow(worker).to(receive_messages(
+        event_data: {},
+        log_identifier: "log_identifier",
+        find_event: build(:event),
+        update_event: nil,
+      ))
+
+      worker.perform(nil, valid_event_data.to_json)
+
+      expect(worker).to(have_received(:update_event))
+    end
+  end
 
   describe ".event_data" do
     it "when data is nil returns nil" do
@@ -97,14 +156,16 @@ RSpec.describe(EventImportWorker, type: :worker) do
     end
 
     it "if event is found returns an Event model instance" do
-      allow(Event).to(receive(:find_by).and_return(Event.new))
+      event = build(:event)
+
+      allow(Event).to(receive(:find_by).and_return(event))
 
       expect(worker.send(:find_event, valid_event_data)).to(be_a(Event))
     end
   end
 
   describe ".create_event" do
-    let(:event) { Event.new }
+    let(:event) { build(:event) }
 
     it "logs the initial creating 'info' message" do
       allow(Rails.logger).to(receive(:info))
@@ -205,7 +266,10 @@ RSpec.describe(EventImportWorker, type: :worker) do
     it "sends 'save' to the event instance" do
       allow(Rails.logger).to(receive(:info))
 
-      allow(event).to(receive_messages(update_instance_from_sqs: nil, save: true))
+      allow(event).to(receive_messages(
+        update_instance_from_sqs: nil,
+        save: true,
+      ))
 
       worker.send(:update_event, event, valid_event_data, log_prefix, log_identifier)
 
@@ -215,7 +279,10 @@ RSpec.describe(EventImportWorker, type: :worker) do
     it "when event saving failed logs the error message" do
       allow(Rails.logger).to(receive(:error))
 
-      allow(event).to(receive_messages(save: false, update_instance_from_sqs: nil))
+      allow(event).to(receive_messages(
+        save: false,
+        update_instance_from_sqs: nil,
+      ))
 
       allow(event.errors).to(receive(:any?).and_return(true))
 
@@ -227,7 +294,10 @@ RSpec.describe(EventImportWorker, type: :worker) do
     it "when event saving succeeded logs the info message" do
       allow(Rails.logger).to(receive(:info))
 
-      allow(event).to(receive_messages(save: true, update_instance_from_sqs: nil))
+      allow(event).to(receive_messages(
+        save: true,
+        update_instance_from_sqs: nil,
+      ))
 
       worker.send(:update_event, event, valid_event_data, log_prefix, log_identifier)
 
