@@ -20,6 +20,12 @@ require "shoulda/matchers"
 # end
 
 RSpec.configure do |config|
+  # Before each test run set the queue adapter to test.
+  # This will allow use to test ActiveJob instances.
+  config.before(:suite) do
+    ActiveJob::Base.queue_adapter = :test
+  end
+
   config.fixture_paths = [
     Rails.root.join("spec/fixtures"),
   ]
