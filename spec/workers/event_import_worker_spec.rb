@@ -39,6 +39,8 @@ RSpec.describe(EventImportWorker, type: :worker) do
       allow(worker).to(receive_messages(
         event_data: {},
         log_identifier: "log_identifier",
+        find_event: nil,
+        create_event: nil,
       ))
 
       worker.perform(nil, valid_event_data.to_json)
@@ -53,11 +55,12 @@ RSpec.describe(EventImportWorker, type: :worker) do
         event_data: {},
         log_identifier: "log_identifier",
         find_event: nil,
+        create_event: nil,
       ))
 
       worker.perform(nil, valid_event_data.to_json)
 
-      expect(worker).to(have_received(:log_identifier))
+      expect(worker).to(have_received(:find_event))
     end
 
     it "when event data is valid and no event is found sends 'create_event'" do
