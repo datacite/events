@@ -17,7 +17,7 @@ class EventImportWorker
 
     log_identifier = log_identifier(event_data)
 
-    Rails.logger.info("#{log_prefix} Process event with #{log_identifier}")
+    Rails.logger.info("#{log_prefix} Processing event with #{log_identifier}")
     Rails.logger.info("#{log_prefix} Searching for event with #{log_identifier}")
 
     event = find_event(event_data)

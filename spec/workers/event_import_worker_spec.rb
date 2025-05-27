@@ -48,6 +48,40 @@ RSpec.describe(EventImportWorker, type: :worker) do
       expect(worker).to(have_received(:log_identifier))
     end
 
+    it "when event data is valid logs process start info message" do
+      allow(Rails.logger).to(receive(:info))
+
+      allow(worker).to(receive_messages(
+        event_data: {},
+        log_identifier: log_identifier,
+        find_event: nil,
+        create_event: nil,
+      ))
+
+      worker.perform(nil, valid_event_data.to_json)
+
+      expect(Rails.logger)
+        .to(have_received(:info)
+          .with("#{log_prefix} Processing event with #{log_identifier}"))
+    end
+
+    it "when event data is valid logs searching for event info message" do
+      allow(Rails.logger).to(receive(:info))
+
+      allow(worker).to(receive_messages(
+        event_data: {},
+        log_identifier: log_identifier,
+        find_event: nil,
+        create_event: nil,
+      ))
+
+      worker.perform(nil, valid_event_data.to_json)
+
+      expect(Rails.logger)
+        .to(have_received(:info)
+          .with("#{log_prefix} Searching for event with #{log_identifier}"))
+    end
+
     it "when event data is valid searchs for an existing event" do
       allow(Rails.logger).to(receive(:info))
 
