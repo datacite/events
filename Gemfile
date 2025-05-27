@@ -47,4 +47,5 @@ end
 group :test do
   gem "simplecov", require: false
   gem "shoulda-matchers"
+  gem "coveralls_reborn", require: false
 end

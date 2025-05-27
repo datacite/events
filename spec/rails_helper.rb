@@ -1,7 +1,15 @@
 # frozen_string_literal: true
 
 require "simplecov"
-SimpleCov.start
+require "coveralls"
+
+SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new([
+  SimpleCov::Formatter::HTMLFormatter,
+  Coveralls::SimpleCov::Formatter,
+])
+
+require "simplecov"
+SimpleCov.start("rails")
 
 require "spec_helper"
 ENV["RAILS_ENV"] ||= "test"
