@@ -109,6 +109,8 @@ RSpec.describe(EventImportWorker, type: :worker) do
     it "logs the initial creating 'info' message" do
       allow(Rails.logger).to(receive(:info))
 
+      allow(Event).to(receive(:create_instance_from_sqs).and_return(event))
+
       allow(event).to(receive(:save).and_return(true))
 
       worker.send(:create_event, valid_event_data, log_prefix, log_identifier)
@@ -177,6 +179,10 @@ RSpec.describe(EventImportWorker, type: :worker) do
     it "logs the initial creating 'info' message" do
       allow(Rails.logger).to(receive(:info))
 
+      allow(event).to(receive(:update_instance_from_sqs))
+
+      allow(event).to(receive(:save).and_return(true))
+
       worker.send(:update_event, event, valid_event_data, log_prefix, log_identifier)
 
       expect(Rails.logger)
@@ -186,6 +192,8 @@ RSpec.describe(EventImportWorker, type: :worker) do
 
     it "sends 'update_instance_from_sqs' to the Event model" do
       allow(Rails.logger).to(receive(:info))
+
+      allow(event).to(receive(:save).and_return(true))
 
       allow(event).to(receive(:update_instance_from_sqs))
 
