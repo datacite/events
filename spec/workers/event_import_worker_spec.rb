@@ -121,6 +121,8 @@ RSpec.describe(EventImportWorker, type: :worker) do
 
       allow(Event).to(receive(:create_instance_from_sqs).and_return(event))
 
+      allow(event).to(receive(:save).and_return(true))
+
       worker.send(:create_event, valid_event_data, log_prefix, log_identifier)
 
       expect(Event).to(have_received(:create_instance_from_sqs))
