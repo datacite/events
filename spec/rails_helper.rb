@@ -1,7 +1,15 @@
 # frozen_string_literal: true
 
 require "simplecov"
-SimpleCov.start
+require "coveralls"
+
+SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new([
+  SimpleCov::Formatter::HTMLFormatter,
+  Coveralls::SimpleCov::Formatter,
+])
+
+require "simplecov"
+SimpleCov.start("rails")
 
 require "spec_helper"
 ENV["RAILS_ENV"] ||= "test"
@@ -20,6 +28,12 @@ require "shoulda/matchers"
 # end
 
 RSpec.configure do |config|
+  # Before each test run set the queue adapter to test.
+  # This will allow use to test ActiveJob instances.
+  config.before(:suite) do
+    ActiveJob::Base.queue_adapter = :test
+  end
+
   config.fixture_paths = [
     Rails.root.join("spec/fixtures"),
   ]

@@ -22,6 +22,22 @@ RSpec.describe(EventImportWorker, type: :worker) do
     "subj_id: subj-id, obj_id: obj-id, source_id: source-id, relation_type_id: relation-type-id"
   end
 
+  describe ".shoryuken_options" do
+    it "uses the correct queue name" do
+      queue_option = described_class.get_shoryuken_options["queue"]
+      queue = queue_option.respond_to?(:call) ? queue_option.call : queue_option
+
+      expect(queue).to(eq("#{ENV["RAILS_ENV"]}_events"))
+    end
+
+    it "uses auto deletes from the sqs queue" do
+      queue_option = described_class.get_shoryuken_options["auto_delete"]
+      auto_delete = queue_option.respond_to?(:call) ? queue_option.call : queue_option
+
+      expect(auto_delete).to(be(true))
+    end
+  end
+
   describe ".perform" do
     let(:worker) { described_class.new }
 
