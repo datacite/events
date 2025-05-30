@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe(EventIndexHandler, type: :concern) do
+RSpec.describe(Events::EventIndexHandler, type: :concern) do
   include ActiveSupport::Testing::TimeHelpers
 
   let(:event) { build(:event) }

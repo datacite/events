@@ -2,13 +2,13 @@
 
 class Event < ApplicationRecord
   # Included Modules
-  include RelationTypeHandler
-  include EventIndexHandler
-  include EventFromSqsUpdater
+  include Events::RelationTypeHandler
+  include Events::EventIndexHandler
+  include Events::EventFromSqsUpdater
   include Elasticsearch::Model
 
   # Extended Modules
-  extend EventFromSqsCreator
+  extend Events::EventFromSqsCreator
 
   # Attributes
   attribute :uuid, :text

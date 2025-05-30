@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe(EventFromSqsUpdater) do
+RSpec.describe(Events::EventFromSqsUpdater, type: :concern) do
   include ActiveSupport::Testing::TimeHelpers
 
   describe "#update_instance_from_sqs" do
