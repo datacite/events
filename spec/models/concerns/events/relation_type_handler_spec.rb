@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe(RelationTypeHandler, type: :concern) do
+RSpec.describe(Events::RelationTypeHandler, type: :concern) do
   let(:doi_subj) { "00.0000/zenodo.00000000" }
   let(:doi_obj) { "00.0000/zenodo.00000001" }
 

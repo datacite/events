@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe(EventFromSqsCreator) do
+RSpec.describe(Events::EventFromSqsCreator, type: :concern) do
   include ActiveSupport::Testing::TimeHelpers
 
   describe "#create_instance_from_sqs" do

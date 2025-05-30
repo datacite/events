@@ -7,19 +7,19 @@ RSpec.describe(Event, type: :model) do
 
   describe "includes" do
     it "RelationTypeHandler" do
-      expect(described_class.ancestors).to(include(RelationTypeHandler))
+      expect(described_class.ancestors).to(include(Events::RelationTypeHandler))
     end
 
     it "EventIndexHandler" do
-      expect(described_class.ancestors).to(include(EventIndexHandler))
+      expect(described_class.ancestors).to(include(Events::EventIndexHandler))
     end
 
     it "EventFromSqsCreator" do
-      expect(described_class.ancestors).to(include(EventFromSqsCreator))
+      expect(described_class.ancestors).to(include(Events::EventFromSqsCreator))
     end
 
     it "EventFromSqsUpdater" do
-      expect(described_class.ancestors).to(include(EventFromSqsUpdater))
+      expect(described_class.ancestors).to(include(Events::EventFromSqsUpdater))
     end
 
     it "Elasticsearch::Model" do
