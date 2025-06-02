@@ -43,7 +43,7 @@ module Events
 
     config.secret_key_base = "blipblapblup"
 
-    config.active_job.logger = Logger.new(nil)
+    config.active_job.logger = Rails.logger
 
     config.logger = Logger.new($stdout)
     config.log_level = :info
