@@ -48,7 +48,7 @@ module Events
     # config.log_level = :info
 
     # Start: Configure Logging
-    config.active_job.logger = Logger.new(nil)
+    config.active_job.logger = Rails.logger
     config.lograge.enabled = true
     config.lograge.formatter = Lograge::Formatters::Logstash.new
     config.lograge.logger = LogStashLogger.new(type: :stdout)
