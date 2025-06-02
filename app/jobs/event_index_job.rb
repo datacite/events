@@ -13,10 +13,14 @@ class EventIndexJob < ApplicationJob
   def perform(obj)
     log_prefix = "[Events:EventIndexJob]"
 
+    Rails.logger.info("#{log_prefix} Indexing event: #{obj.uuid} in OpenSearch")
+
     response = obj.__elasticsearch__.index_document
 
     if ["created", "updated"].exclude?(response["result"])
       Rails.logger.error("#{log_prefix} OpenSearch Error: #{response.inspect}")
+    else
+      Rails.logger.info("#{log_prefix} Successfully indexed event: #{obj.uuid} in OpenSearch")
     end
   end
 end
