@@ -11,3 +11,5 @@ end
 # This ensures that we work with queues that
 # have an environment prefix i.e. stage_events or development_events
 Shoryuken.active_job_queue_name_prefixing = true
+
+Shoryuken::Logging.logger = Rails.logger
