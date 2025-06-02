@@ -41,12 +41,12 @@ module Events
 
     config.middleware.use(Rack::Deflater)
 
-    config.active_job.logger = Logger.new(nil)
+    # config.active_job.logger = Logger.new(nil)
 
     config.secret_key_base = "blipblapblup"
 
-    # config.logger = Logger.new($stdout)
-    # config.log_level = :info
+    config.logger = Logger.new($stdout)
+    config.log_level = :info
 
     config.active_job.queue_adapter = :shoryuken
     config.active_job.queue_name_prefix = Rails.env
