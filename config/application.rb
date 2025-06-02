@@ -41,12 +41,39 @@ module Events
 
     config.middleware.use(Rack::Deflater)
 
-    config.active_job.logger = Logger.new(nil)
-
     config.secret_key_base = "blipblapblup"
 
-    config.logger = Logger.new($stdout)
-    config.log_level = :info
+    config.active_job.logger = Logger.new(nil)
+
+    # config.logger = Logger.new($stdout)
+    # config.log_level = :info
+
+    # Start: Configure Logging
+    config.active_job.logger = Rails.logger
+    config.lograge.enabled = true
+    config.lograge.formatter = Lograge::Formatters::Logstash.new
+    config.lograge.logger = LogStashLogger.new(type: :stdout)
+    config.logger = config.lograge.logger ## LogStashLogger needs to be pass to rails logger, see roidrage/lograge#26
+    config.log_level = ENV["LOG_LEVEL"].to_sym
+
+    config.lograge.ignore_actions = [
+      "HeartbeatController#index",
+      "IndexController#index",
+    ]
+    config.lograge.ignore_custom = lambda do |event|
+      event.payload.inspect.length > 100_000
+    end
+    config.lograge.base_controller_class = "ActionController::API"
+
+    config.lograge.custom_options = lambda do |event|
+      exceptions = ["controller", "action", "format", "id"]
+      {
+        ddsource: ["ruby"],
+        params: event.payload[:params].except(*exceptions),
+        uid: event.payload[:uid],
+      }
+    end
+    # End: Configure Logging
 
     config.active_job.queue_adapter = :shoryuken
     config.active_job.queue_name_prefix = Rails.env
