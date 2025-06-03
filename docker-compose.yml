@@ -18,7 +18,7 @@ services:
       - AWS_REGION=us-east-1
       - AWS_ACCESS_KEY_ID=test
       - AWS_SECRET_ACCESS_KEY=test
-      - DISABLE_QUEUE_WORKER=false
+      - DISABLE_QUEUE_WORKER=true
     build:
       context: ./
       dockerfile: Dockerfile
