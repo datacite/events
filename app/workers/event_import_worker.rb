@@ -30,7 +30,9 @@ class EventImportWorker
 
     Rails.logger.info("#{log_prefix} Completed processing event for #{log_identifier}")
   rescue
-    Rails.logger.error("Shoryuken error in worker=#{self.class.name} queue=#{self.class.get_shoryuken_options["queue"]}: #{e.class}: #{e.message}")
+    Rails.logger.error(
+      "Shoryuken error in worker=#{self.class.name}
+      queue=#{self.class.get_shoryuken_options["queue"]}: #{e.class}: #{e.message}")
   end
 
   private
