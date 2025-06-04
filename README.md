@@ -4,6 +4,10 @@
 
 This is the code repository for the DataCite Events REST API.
 
+### Process Flow Diagram
+
+![Event Service Process Flow Diagram](images/events_service_process_flow.jpg)
+
 ### Adding new Shoryuken workers
 
 1. Add workers to the app/workers directory
