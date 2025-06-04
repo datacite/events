@@ -109,7 +109,19 @@ RSpec.describe(EventIndexJob, type: :job) do
   end
 
   describe ".perform" do
-    it "attempts to indexes an event" do
+    it "logs the indexing attempt" do
+      allow(Rails.logger).to(receive(:info))
+
+      allow(event.__elasticsearch__).to(receive(:index_document).and_return("result" => "created"))
+
+      described_class.perform_now(event)
+
+      expect(Rails.logger)
+        .to(have_received(:info)
+          .with("[Events:EventIndexJob] Indexing event: #{event.uuid} in OpenSearch"))
+    end
+
+    it "attempts to index an event" do
       allow(event.__elasticsearch__).to(receive(:index_document).and_return("result" => "created"))
 
       described_class.perform_now(event)
@@ -117,15 +129,19 @@ RSpec.describe(EventIndexJob, type: :job) do
       expect(event.__elasticsearch__).to(have_received(:index_document).once)
     end
 
-    it "when indexing successfully creates an event document does not log anything" do
+    it "when indexing successfully creates an event document logs an info message" do
+      allow(Rails.logger).to(receive(:info))
+
       allow(event.__elasticsearch__).to(receive(:index_document).and_return("result" => "created"))
 
       described_class.perform_now(event)
 
-      expect(Rails.logger).not_to(have_received(:error))
+      expect(Rails.logger)
+        .to(have_received(:info)
+          .with("[Events:EventIndexJob] Successfully indexed event: #{event.uuid} in OpenSearch"))
     end
 
-    it "when indexing successfully updates an event document does not log anything" do
+    it "when indexing successfully updates an event document does not log error" do
       allow(event.__elasticsearch__).to(receive(:index_document).and_return("result" => "updated"))
 
       described_class.perform_now(event)
