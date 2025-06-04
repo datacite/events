@@ -35,7 +35,7 @@ Start the Events Service Container.
 
 ### Where is the Events Service API available?
 
-The API is available at http://localhost:8700
+The API is available locally at http://localhost:8700
 
 ### Where is the database?
 
