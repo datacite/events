@@ -8,11 +8,7 @@ class EventsController < ApplicationController
 
     Rails.logger.info("Events Production MySql Test Start")
     event = Event.first
-    if event.blank?
-      Rails.logger.info("No event found")
-    else
-      Rails.logger.info("Event found: #{event.uuid}")
-    end
+    Rails.logger.info("event: #{event&.inspect}")
     Rails.logger.info("Events Production MySql Test End")
 
     Rails.logger.info("Events Production Sentry Test Start")
