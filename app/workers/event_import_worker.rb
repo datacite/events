@@ -6,6 +6,8 @@ class EventImportWorker
   shoryuken_options queue: -> { "#{ENV["RAILS_ENV"]}_events" }, auto_delete: true
 
   def perform(sqs_message = nil, data = nil)
+    raise "EventImportWorker#perform sent this error to sentry" if ENV["RAILS_ENV"] == "stage"
+
     log_prefix = "[Events:EventImportWorker]"
 
     event_data = event_data(data)
