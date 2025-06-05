@@ -272,6 +272,22 @@ RSpec.describe(EventImportWorker, type: :worker) do
       expect(Rails.logger).to(have_received(:error))
     end
 
+    it "when event saving fails due to RecordNotUnique logs the error message" do
+      allow(Rails.logger).to(receive(:info))
+
+      allow(Rails.logger).to(receive(:error))
+
+      allow(Event).to(receive(:create_instance_from_sqs).and_return(event))
+
+      allow(event).to(receive(:save).and_raise(ActiveRecord::RecordNotUnique))
+
+      worker.send(:create_event, valid_event_data, log_prefix, log_identifier)
+
+      expect(Rails.logger)
+        .to(have_received(:error)
+          .with("#{log_prefix} Event with #{log_identifier} already exists, skipping creation"))
+    end
+
     it "when event saving succeeded logs the info message" do
       allow(Rails.logger).to(receive(:info))
 

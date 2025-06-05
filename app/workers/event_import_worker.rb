@@ -72,6 +72,8 @@ class EventImportWorker
     elsif event.errors.any?
       Rails.logger.error("#{log_prefix} Failed to create event with #{log_identifier}: #{event.errors.inspect}")
     end
+  rescue ActiveRecord::RecordNotUnique
+    Rails.logger.error("#{log_prefix} Event with #{log_identifier} already exists, skipping creation")
   end
 
   def update_event(event, event_data, log_prefix, log_identifier)
