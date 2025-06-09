@@ -13,15 +13,13 @@ RSpec.describe(HeartbeatController, type: :request) do
     it "returns json" do
       get "/heartbeat"
 
-      expect(response.content_type).to(eq("application/json; charset=utf-8"))
+      expect(response.content_type).to(eq("text/plain; charset=utf-8"))
     end
 
     it "returns the expected data" do
       get "/heartbeat"
 
-      expected = { data: { healthy: true } }
-
-      expect(JSON.parse(response.body, symbolize_names: true)).to(eq(expected))
+      expect(response.body).to(eq("OK"))
     end
   end
 end
