@@ -4,4 +4,6 @@ Rails.application.routes.draw do
   resources :heartbeat, only: [:index]
   resources :events, only: [:index]
   resources :switchover, only: [:index]
+
+  root to: redirect("/events")
 end
