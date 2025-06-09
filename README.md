@@ -4,9 +4,13 @@
 
 This is the code repository for the DataCite Events REST API.
 
+---
+
 ### Process Flow Diagram
 
 ![Event Service Process Flow Diagram](images/events_service_process_flow.jpg)
+
+---
 
 ### Dependencies
 
@@ -15,6 +19,59 @@ Local application development is dependent on [Docker](https://www.docker.com/).
 Local application development is dependent on [DataCite LocalStack Repository](https://github.com/datacite/datacite_localstack). Ensure that this is cloned locally.
 
 Local application development is dependent on [Lupo](https://github.com/datacite/lupo). Ensure this is cloned locally.
+
+---
+
+### Release management
+
+#### What is semantic versioning?
+
+Semantic versioning (SemVer) is a way of numbering software releases using the format **MAJOR.MINOR.PATCH** (like `1.4.2`) to indicate the type of changes made.
+
+#### Why do we use it?
+
+Semantic versioning helps developers and users quickly understand whether an update will:
+
+- break existing code,
+- add new features, or
+- just fix bugs.
+
+This makes it easier to manage dependencies and upgrades safely.
+
+#### How does it work?
+
+- **MAJOR** version (`X.y.z`):  
+  Increment when you make incompatible (breaking) changes.  
+  _Example: `1.2.3` → `2.0.0` (old code may break)_
+
+- **MINOR** version (`x.Y.z`):  
+  Increment when you add new, backward-compatible features.  
+  _Example: `1.2.3` → `1.3.0` (new features, old code still works)_
+
+- **PATCH** version (`x.y.Z`):  
+  Increment when you make backward-compatible bug fixes.  
+  _Example: `1.2.3` → `1.2.4` (only bug fixes, safe to update)_
+
+#### Examples
+
+| Version Change | What Happened            | Example |
+| -------------- | ------------------------ | ------- |
+| 1.2.3 → 2.0.0  | Breaking change          | MAJOR   |
+| 1.2.3 → 1.3.0  | New feature, no breakage | MINOR   |
+| 1.2.3 → 1.2.4  | Bug fix, no breakage     | PATCH   |
+
+### Special labels
+
+- **Pre-release:** `2.0.0-beta`, `1.3.0-rc.1`
+- **Build metadata:** `1.2.3+exp.sha.5114f85`
+
+#### Summary
+
+Semantic versioning uses a 3-part number to clearly communicate the impact of software changes, helping everyone update safely and confidently.
+
+For more: [semver.org](https://semver.org/)
+
+---
 
 ### How to run the application
 
@@ -44,11 +101,15 @@ The Events Service simply communicates with this database.
 The Events services does not own any part of the database and is not responsible for mutating the schema.
 For local and testing purposes we use the [activerecord-nulldb-adapter](https://github.com/nulldb/nulldb) Ruby Gem.
 
+---
+
 ### Adding new Shoryuken workers
 
 1. Add workers to the app/workers directory
 2. Ensure you set the shoryuken_options e.g. `shoryuken_options queue: -> { "#{ENV['RAILS_ENV']}\_events" }, auto_delete: true`
 3. Queues use environment prefixes. The prefix is set with the environment variable RAILS_ENV locally.
+
+---
 
 ### Starting the Shoryuken workers
 
