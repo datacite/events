@@ -46,7 +46,6 @@ jobs:
         if: ${{ (inputs.deployment_environment == 'production') }}
         run: |
           ./dockerize -template prod-eu-west/services/events/_events.auto.tfvars.tmpl:prod-eu-west/services/events/_events.auto.tfvars
-          ./dockerize -template test/services/events/_events.auto.tfvars.tmpl:test/services/events/_events.auto.tfvars
 
           git add prod-eu-west/services/events/_events.auto.tfvars
           git commit -m "Adding events git variables for tag ${{ inputs.image_tag }}"
