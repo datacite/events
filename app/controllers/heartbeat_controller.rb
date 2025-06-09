@@ -2,8 +2,10 @@
 
 class HeartbeatController < ApplicationController
   def index
-    message = { data: { healthy: true } }
-
-    render(json: message)
+    render(
+      plain: "OK",
+      status: :ok,
+      content_type: "text/plain",
+    )
   end
 end
