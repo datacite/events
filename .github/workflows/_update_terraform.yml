@@ -49,7 +49,6 @@ jobs:
           ./dockerize -template test/services/events/_events.auto.tfvars.tmpl:test/services/events/_events.auto.tfvars
 
           git add prod-eu-west/services/events/_events.auto.tfvars
-          git add test/services/events/_events.auto.tfvars
           git commit -m "Adding events git variables for tag ${{ inputs.image_tag }}"
       - name: Push changes
         uses: ad-m/github-push-action@v0.8.0
