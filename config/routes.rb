@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  resources :heartbeat, only: [:index]
+  get "heartbeat", to: "heartbeat#index"
 
   root to: "heartbeat#index"
 end
