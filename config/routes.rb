@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  resources :heartbeat, only: [:index]
-  resources :events, only: [:index]
+  get "heartbeat", to: "heartbeat#index"
 
-  root to: redirect("/events")
+  root to: "heartbeat#index"
 end
