@@ -62,14 +62,14 @@ module Events
       # then followed by a slash and finally followed by at least 1 character.
       # i.e. 10.1234/a, 10.12345/zenodo.100
       subj_proxy_identifier_dois = Array.wrap(subj_hash["proxyIdentifiers"])
-        .map { |s| s[%r{\A(10\.\d{4,5}/.+)\z}, 1] }
+        .map { |s| s && s[%r{\A(10\.\d{4,5}/.+)\z}, 1] }
         .compact
 
       # Extract all obj proxy identifiers that match 10.()dot followed by 4 or 5 digits
       # then followed by a slash and finally followed by at least 1 character.
       # i.e. 10.1234/a, 10.12345/zenodo.100
       obj_proxy_identifier_dois = Array.wrap(obj_hash["proxyIdentifiers"])
-        .map { |s| s[%r{\A(10\.\d{4,5}/.+)\z}, 1] }
+        .map { |s| s && s[%r{\A(10\.\d{4,5}/.+)\z}, 1] }
         .compact
 
       subj_funder_dois = Array.wrap(subj_hash["funder"])
