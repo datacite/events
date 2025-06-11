@@ -4,10 +4,10 @@ pidfile: tmp/pids/shoryuken.pid
 
 groups:
   events:
-    concurrency: 5
+    concurrency: 7
     queues:
       - events
   events_index:
-    concurrency: 5
+    concurrency: 7
     queues:
       - events_index
