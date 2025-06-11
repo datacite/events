@@ -1,13 +1,13 @@
-concurrency: 20
+concurrency: 30
 delay: 0
 pidfile: tmp/pids/shoryuken.pid
 
 groups:
   events:
-    concurrency: 7
+    concurrency: 10
     queues:
       - events
   events_index:
-    concurrency: 7
+    concurrency: 10
     queues:
       - events_index
