@@ -1,6 +1,6 @@
 # DataCite Events Service
 
-[![Coverage Status](https://coveralls.io/repos/github/datacite/events/badge.svg?branch=main)](https://coveralls.io/github/datacite/events?branch=main)
+[![Coverage Status](https://coveralls.io/repos/github/datacite/events/badge.svg?branch=main&t=timestamp)](https://coveralls.io/github/datacite/events?branch=main&t=timestamp)
 
 This is the code repository for the DataCite Events REST API.
 
