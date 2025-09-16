@@ -15,7 +15,12 @@ defaults: &defaults
   <<: *mysql
 
 development:
-  <<: *defaults
+  primary:
+    <<: *defaults
+
+  enrichments:
+    adapter: sqlite3
+    database: db/enrichments.sqlite3
 
 test:
   # <<: *defaults
@@ -26,7 +31,12 @@ production:
   <<: *defaults
 
 stage:
-  <<: *defaults
+  primary:
+    <<: *defaults
+
+  enrichments:
+    adapter: sqlite3
+    database: db/enrichments.sqlite3
 
 uat:
   <<: *defaults

@@ -8,8 +8,8 @@
 /.bundle
 
 # Ignore the default SQLite database.
-/db/*.sqlite3
-/db/*.sqlite3-journal
+# /db/*.sqlite3
+# /db/*.sqlite3-journal
 
 # Ignore all logfiles and tempfiles.
 /log/*
@@ -34,7 +34,7 @@ capybara-*.html
 /log/*
 /tmp/*
 /data/*
-/db/*.sqlite3
+# /db/*.sqlite3
 /public/*
 !/public/.keep
 /coverage/
