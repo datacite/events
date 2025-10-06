@@ -24,7 +24,8 @@ development:
 
 test:
   # <<: *defaults
-  adapter: nulldb
+  primary:
+    adapter: nulldb
   # database: <%= ENV['MYSQL_DATABASE'] %>_test<%= ENV['TEST_ENV_NUMBER'] %>
   enrichments:
     adapter: sqlite3
