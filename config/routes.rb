@@ -5,6 +5,6 @@ Rails.application.routes.draw do
 
   root to: "heartbeat#index"
 
-  get "doi/*doi", to: "enrichments#doi", constraints: { id: /.+/ }
-  get "dois", to: "enrichments#dois", constraints: { id: /.+/ }
+  get "enriched-doi/*doi", to: "enrichments#doi", constraints: { id: /.+/ }, format: false
+  get "enriched-dois", to: "enrichments#dois", constraints: { id: /.+/ }, format: false
 end
