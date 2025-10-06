@@ -26,7 +26,7 @@ test:
   # <<: *defaults
   adapter: nulldb
   # database: <%= ENV['MYSQL_DATABASE'] %>_test<%= ENV['TEST_ENV_NUMBER'] %>
-  database: db/test.sqlite3
+  database: db/enrichments.sqlite3
 
 production:
   <<: *defaults
