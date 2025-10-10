@@ -8,4 +8,5 @@ end
 
 class Enrichment < PocRecord
   serialize :enriched_value, coder: JSON
+  serialize :original_value, coder: JSON
 end

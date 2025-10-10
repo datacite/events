@@ -64,15 +64,16 @@ namespace :enrichment do
     data.each do |item|
       count += 1
 
-      break if count == 1001
+      break if count == 2001
 
       enrichment = Enrichment.new(
         doi:  item["doi"],
         source: "COMET",
-        process: "10.000/FAKE.PROCESS",
+        process: "10.0000/FAKE.PROCESS",
         field: "types",
         action: "update",
-        enriched_value: item["currentTypes"],
+        original_value: item["currentTypes"],
+        enriched_value: item["reclassifiedTypes"],
         created: Time.current.utc,
         updated: Time.current.utc,
         produced: Time.current.utc - 5.days,
