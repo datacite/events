@@ -26,20 +26,26 @@ namespace :enrichment do
 
   desc "Ingest ARXIV data"
   task ingest_arxiv: :environment do
-    CSV.foreach("lib/data/20250426_arxiv_sample_3_matches.csv", headers: true) do |row|
+    file = File.read("lib/data/20250615_arxiv_preprint_matching_results.json")
+    data = JSON.parse(file)
+    count = 0
+
+    data.each do |item|
+      count += 1
+
+      break if count == 2001
+
       enrichment = Enrichment.new(
-        doi:  row["input_doi"],
+        doi:  item["input_doi"],
         source: "COMET",
-        process: "10.000/FAKE.PROCESS",
-        field: "types",
-        action: "update",
+        process: "10.0000/FAKE.PROCESS",
+        field: "relatedIdentifiers",
+        action: "insert",
+        original_value: nil,
         enriched_value: {
-          ris: "GEN",
-          bibtex: "misc",
-          citeproc: "article",
-          schemaOrg: "CreativeWork",
-          resourceType: "Article",
-          resourceTypeGeneral: "Dataset",
+          relationType: "Preprint",
+          relatedIdentifier: item["matched_doi"],
+          relatedIdentifierType: "DOI",
         },
         created: Time.current.utc,
         updated: Time.current.utc,
@@ -47,9 +53,9 @@ namespace :enrichment do
       )
 
       if enrichment.save
-        puts("Created enrichment for #{row["input_doi"]}")
+        puts("Created enrichment for #{item["input_doi"]}")
       else
-        puts("Failed to create enrichment for #{row["input_doi"]}")
+        puts("Failed to create enrichment for #{item["input_doi"]}")
         puts(enrichment.errors.full_messages.join(","))
       end
     end
