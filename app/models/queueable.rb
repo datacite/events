@@ -13,7 +13,7 @@ module Queueable
     private
 
     def send_message(body, options = {})
-      sqs = get_sqs_client
+      sqs = create_sqs_client
       queue_name_prefix = ENV["SQS_PREFIX"].presence || Rails.env
       queue_url = sqs.get_queue_url(queue_name: "#{queue_name_prefix}_#{options[:queue_name]}").queue_url
 
@@ -33,7 +33,7 @@ module Queueable
       Rails.logger.error("Failed to send message to #{queue_url}. #{error.inspect}.")
     end
 
-    def get_sqs_client
+    def create_sqs_client
       if Rails.env.development?
         Aws::SQS::Client.new(endpoint: ENV["AWS_ENDPOINT"])
       else
