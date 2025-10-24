@@ -26,40 +26,74 @@ namespace :enrichment do
 
   desc "Ingest ARXIV data"
   task ingest_arxiv: :environment do
-    file = File.read("lib/data/20250615_arxiv_preprint_matching_results.json")
-    data = JSON.parse(file)
+    csv_path = Rails.root.join("lib/data/arxiv_preprint_matching.csv")
     count = 0
 
-    data.each do |item|
+    CSV.foreach(csv_path, headers: true) do |row|
       count += 1
 
       break if count == 2001
 
+      item = row.to_hash
+
       enrichment = Enrichment.new(
-        doi:  item["input_doi"],
-        source: "COMET",
-        process: "10.0000/FAKE.PROCESS",
-        field: "relatedIdentifiers",
-        action: "insert",
-        original_value: nil,
-        enriched_value: {
-          relationType: "Preprint",
-          relatedIdentifier: item["matched_doi"],
-          relatedIdentifierType: "DOI",
-        },
+        doi:  item["doi"],
+        source: item["source"],
+        process: item["process"],
+        field: item["field"],
+        action: item["action"],
+        original_value: item["originalValue"],
+        enriched_value: JSON.parse(item["enrichedValue"]),
         created: Time.current.utc,
         updated: Time.current.utc,
-        produced: Time.current.utc - 5.days,
+        produced: item["produced"],
       )
 
       if enrichment.save
-        puts("Created enrichment for #{item["input_doi"]}")
+        puts("Created enrichment for #{item["doi"]}")
       else
-        puts("Failed to create enrichment for #{item["input_doi"]}")
+        puts("Failed to create enrichment for #{item["doi"]}")
         puts(enrichment.errors.full_messages.join(","))
       end
     end
   end
+
+  # desc "Ingest ARXIV data"
+  # task ingest_arxiv: :environment do
+  #   file = File.read("lib/data/20250615_arxiv_preprint_matching_results.json")
+  #   data = JSON.parse(file)
+  #   count = 0
+
+  #   data.each do |item|
+  #     count += 1
+
+  #     break if count == 2001
+
+  #     enrichment = Enrichment.new(
+  #       doi:  item["input_doi"],
+  #       source: "COMET",
+  #       process: "10.0000/FAKE.PROCESS",
+  #       field: "relatedIdentifiers",
+  #       action: "insert",
+  #       original_value: nil,
+  #       enriched_value: {
+  #         relationType: "Preprint",
+  #         relatedIdentifier: item["matched_doi"],
+  #         relatedIdentifierType: "DOI",
+  #       },
+  #       created: Time.current.utc,
+  #       updated: Time.current.utc,
+  #       produced: Time.current.utc - 5.days,
+  #     )
+
+  #     if enrichment.save
+  #       puts("Created enrichment for #{item["input_doi"]}")
+  #     else
+  #       puts("Failed to create enrichment for #{item["input_doi"]}")
+  #       puts(enrichment.errors.full_messages.join(","))
+  #     end
+  #   end
+  # end
 
   desc "Ingest procedural resource type"
   task ingest_procedural_resource_type: :environment do
