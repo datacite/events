@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Queueable
+module SqsService
   extend ActiveSupport::Concern
 
   require "aws-sdk-sqs"
