@@ -87,6 +87,6 @@ class EnrichmentsController < ApplicationController
   def build_enrichments_field(enrichment, doi)
     doi["relationships"] ||= {}
     doi["relationships"]["enrichments"] ||= []
-    doi["relationships"]["enrichments"] << [enrichment]
+    doi["relationships"]["enrichments"] << enrichment
   end
 end
