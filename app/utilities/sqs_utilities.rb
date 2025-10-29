@@ -1,11 +1,9 @@
 # frozen_string_literal: true
 
-module SqsService
-  extend ActiveSupport::Concern
-
+module SqsUtilities
   require "aws-sdk-sqs"
 
-  class_methods do
+  class << self
     def send_events_other_doi_job_message(data)
       send_message(data, shoryuken_class: "OtherDoiJobWorker", queue_name: "events_other_doi_job")
     end
