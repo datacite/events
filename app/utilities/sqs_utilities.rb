@@ -5,7 +5,7 @@ module SqsUtilities
 
   class << self
     def send_events_other_doi_job_message(data)
-      send_message(data, shoryuken_class: "OtherDoiJobWorker", queue_name: "events_other_doi_job")
+      send_message(data, shoryuken_class: "OtherDoiJob", queue_name: "events_other_doi_job")
     end
 
     private
