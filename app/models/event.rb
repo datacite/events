@@ -72,6 +72,7 @@ class Event < ApplicationRecord
 
   # After the event is persisted successfully to the database, we index the event in OpenSearch.
   after_commit -> { EventIndexJob.perform_later(self) }
+  after_commit -> { SqsUtilities.send_events_other_doi_job_message({ subj_id: subj_id, obj_id: obj_id }) }
 
   # OpenSearch Mappings
   mapping dynamic: "false" do
