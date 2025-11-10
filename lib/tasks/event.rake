@@ -2,6 +2,7 @@
 
 namespace :event do
   desc "Import Crossref DOIs for events created within a date range"
+  # command: IMPORT_DATE=2025-06-11 bundle exec rake event:import_crossref_event_dois
   task import_crossref_event_dois: :environment do
     date = Date.parse(ENV["IMPORT_DATE"])
     start_date = date.beginning_of_day
@@ -15,6 +16,7 @@ namespace :event do
       .where(source_id: ["crossref", "datacite-crossref"])
       .where(created_at: start_date...end_date)
 
+    puts(events.to_sql)
     puts("Number of events: #{events.count}")
 
     events.each do |event|
