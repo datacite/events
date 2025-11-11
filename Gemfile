@@ -29,6 +29,7 @@ gem "oj", "~> 3.16", ">= 3.16.11"
 
 # This gem will allow us to write tests without the need for a database
 gem "activerecord-nulldb-adapter", "~> 1.1", ">= 1.1.1"
+gem "parallel", "~> 1.27"
 
 group :development, :test do
   gem "debug", platforms: [:mri, :windows]
@@ -43,7 +44,6 @@ group :development, :test do
   gem "bundler-audit", require: false
   gem "brakeman", require: false
   gem "rspec-rails", "~> 7.0.0"
-  gem "parallel", "~> 1.27"
 end
 
 group :test do
