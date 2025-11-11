@@ -2,13 +2,13 @@
 
 namespace :event do
   desc "Import Crossref DOIs for events created within a date range"
-  # command: IMPORT_DATE=2025-06-11 bundle exec rake event:import_crossref_event_dois
+  # example command: IMPORT_DATE=2025-06-11 bundle exec rake event:import_crossref_event_dois
   task import_crossref_event_dois: :environment do
     date = Date.parse(ENV["IMPORT_DATE"])
     start_date = date.beginning_of_day
     end_date = (date + 1).beginning_of_day
 
-    puts("Imported date: #{date}")
+    puts("Import date: #{date}")
     puts("Start date: #{start_date}")
     puts("End date: #{end_date}")
 
@@ -16,22 +16,13 @@ namespace :event do
       .where(source_id: ["crossref", "datacite-crossref"])
       .where(created_at: start_date...end_date)
 
-    puts(events.to_sql)
     puts("Number of events: #{events.count}")
 
-    events.each do |event|
-      payload = {
+    Parallel.each(events, in_threads: 20) do |event|
+      SqsUtilities.send_events_other_doi_job_message({
         subj_id: event.subj_id,
         obj_id: event.obj_id,
-        source_id: event.source_id,
-      }
-
-      puts("SQS message payload: #{payload.inspect}")
-
-      # SqsUtilities.send_events_other_doi_job_message({
-      #   subj_id: event.subj_id,
-      #   obj_id: event.obj_id,
-      # })
+      })
     end
   end
 end

@@ -43,6 +43,7 @@ group :development, :test do
   gem "bundler-audit", require: false
   gem "brakeman", require: false
   gem "rspec-rails", "~> 7.0.0"
+  gem "parallel", "~> 1.27"
 end
 
 group :test do
