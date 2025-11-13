@@ -8,7 +8,7 @@ namespace :event do
   task import_crossref_event_dois: :environment do
     date = Date.parse(ENV["IMPORT_DATE"])
     start_date = date.beginning_of_day
-    end_date = (date + 1.month).beginning_of_month.beginning_of_day
+    end_date = (date + 7.days).beginning_of_day
 
     puts("Import date: #{date}")
     puts("Start date: #{start_date}")
