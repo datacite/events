@@ -30,6 +30,7 @@ gem "sqlite3", "~> 1.4"
 
 # This gem will allow us to write tests without the need for a database
 gem "activerecord-nulldb-adapter", "~> 1.1", ">= 1.1.1"
+gem "parallel", "~> 1.27"
 
 group :development, :test do
   gem "debug", platforms: [:mri, :windows]
