@@ -15,14 +15,19 @@ namespace :event do
     events = Event
       .where(source_id: ["crossref", "datacite-crossref"])
       .where(created_at: start_date...end_date)
+      .order(:id)
 
     puts("Number of events: #{events.count}")
 
-    Parallel.each(events, in_threads: 20) do |event|
-      SqsUtilities.send_events_other_doi_job_message({
-        subj_id: event.subj_id,
-        obj_id: event.obj_id,
-      })
+    events.in_batches(of: 10_000) do |batch|
+      batch_events = batch.select(:id, :subj_id, :obj_id).to_a
+
+      Parallel.each(batch_events, in_threads: 20) do |batch_event|
+        SqsUtilities.send_events_other_doi_job_message({
+          subj_id: batch_event.subj_id,
+          obj_id: batch_event.obj_id,
+        })
+      end
     end
   end
 end
