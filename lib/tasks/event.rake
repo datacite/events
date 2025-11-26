@@ -19,7 +19,11 @@ namespace :event do
 
     puts("Number of events: #{events.count}")
 
+    batch_count = 0
+
     events.in_batches(of: 10_000) do |batch|
+      batch_count += 1
+      puts("Processing batch: #{batch_count}")
       batch_events = batch.select(:id, :subj_id, :obj_id).to_a
 
       Parallel.each(batch_events, in_threads: 20) do |batch_event|
@@ -29,5 +33,7 @@ namespace :event do
         })
       end
     end
+
+    puts("Rake task has completed!")
   end
 end
