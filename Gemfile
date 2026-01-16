@@ -2,9 +2,9 @@
 
 source "https://rubygems.org"
 
-ruby "3.1.6"
+ruby "3.2.9"
 
-gem "rails", "~> 7.1.3", ">= 7.1.3.2"
+gem "rails", "~> 7.2", ">= 7.2.3"
 gem "bootsnap", require: false
 gem "rack-cors"
 gem "shoryuken", "~> 4.0"
