@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 Sentry.init do |config|
   config.enabled_environments = ["stage", "production"]
   config.dsn = ENV["SENTRY_DSN"]

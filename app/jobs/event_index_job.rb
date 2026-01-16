@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class EventIndexJob < ApplicationJob
   queue_as :events_index
 

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 RSpec.configure do |config|
   ENV["SKIP_TEST_DATABASE_TRUNCATE"] = "true"
 

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Handles setting the source and target doi data of an event when an event is created or updated.
 # Method is only invoked via a before_validation callback in the events model.
 

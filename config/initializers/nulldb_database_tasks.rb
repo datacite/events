@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Patch DatabaseTasks for nulldb to prevent schema loading attempts
 if Rails.env.test? && defined?(ActiveRecord::Tasks::DatabaseTasks)
   module ActiveRecord

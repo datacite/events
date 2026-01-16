@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 if Rails.env.development?
   Aws.config.update({
     endpoint: ENV["AWS_ENDPOINT"],

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class Event < ApplicationRecord
   # Included Modules
   include Events::RelationTypeHandler

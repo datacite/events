@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Events
   module EventIndexHandler
     extend ActiveSupport::Concern

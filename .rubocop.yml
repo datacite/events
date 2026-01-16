@@ -11,7 +11,7 @@ require:
   - rubocop-factory_bot
 
 AllCops:
-  TargetRubyVersion: 3.0
+  TargetRubyVersion: 3.2
   Exclude:
     - "bin/**/*"
     - "log/**/*"
@@ -33,3 +33,10 @@ Layout/SpaceInsideHashLiteralBraces:
 
 RSpec/ExampleLength:
   Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Rails/SkipsModelValidations:
+  Exclude:
+    - "db/migrate/**/*"

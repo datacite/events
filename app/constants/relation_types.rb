@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module RelationTypes
   REFERENCE_RELATION_TYPES = [
     "cites", "is-supplemented-by", "references",

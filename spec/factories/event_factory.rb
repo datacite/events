@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 FactoryBot.define do
   factory :event do
     uuid { "00000000-0000-0000-0000-000000000000" }

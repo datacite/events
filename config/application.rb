@@ -21,7 +21,7 @@ ENV["GITHUB_URL"] ||= "https://github.com/datacite/events"
 
 module Events
   class Application < Rails::Application
-    config.load_defaults 7.2
+    config.load_defaults(7.2)
 
     config.autoload_lib(ignore: nil)
 
