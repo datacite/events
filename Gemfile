@@ -5,7 +5,7 @@ ruby "3.2.9"
 gem "rails", "~> 7.2", ">= 7.2.3"
 gem "bootsnap", require: false
 gem "rack-cors"
-gem "shoryuken", "~> 4.0"
+gem "shoryuken", "~> 7.0"
 gem "aws-sdk-sqs", "~> 1.3"
 gem "lograge", "~> 0.11.2"
 gem "logstash-event", "~> 1.2", ">= 1.2.02"
