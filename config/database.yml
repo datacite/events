@@ -15,18 +15,32 @@ defaults: &defaults
   <<: *mysql
 
 development:
-  <<: *defaults
+  primary:
+    <<: *defaults
+
+  enrichments:
+    adapter: sqlite3
+    database: db/enrichments.sqlite3
 
 test:
   # <<: *defaults
-  adapter: nulldb
+  primary:
+    adapter: nulldb
   # database: <%= ENV['MYSQL_DATABASE'] %>_test<%= ENV['TEST_ENV_NUMBER'] %>
+  enrichments:
+    adapter: sqlite3
+    database: db/enrichments.sqlite3
 
 production:
   <<: *defaults
 
 stage:
-  <<: *defaults
+  primary:
+    <<: *defaults
+
+  enrichments:
+    adapter: sqlite3
+    database: db/enrichments.sqlite3
 
 uat:
   <<: *defaults
