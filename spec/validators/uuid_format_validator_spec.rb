@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require "active_support/testing/time_helpers"
 
 RSpec.describe(UuidFormatValidator) do

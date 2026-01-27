@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class Doi
   class << self
     def publication_date(doi)

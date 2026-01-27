@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module DoiUtilities
   class << self
     def normalize_doi(url)

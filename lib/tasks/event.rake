@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 namespace :event do
   desc "Import Crossref DOIs for events created within a date range"
   # example command: IMPORT_DATE=2025-06-11 bundle exec rake event:import_crossref_event_dois

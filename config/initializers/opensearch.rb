@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require "faraday"
 require "faraday_middleware/aws_sigv4"
 require "faraday/excon"
