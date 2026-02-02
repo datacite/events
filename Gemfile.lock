@@ -434,7 +434,7 @@ DEPENDENCIES
   uuid (~> 2.3, >= 2.3.9)
 
 RUBY VERSION
-   ruby 3.2.9p265
+   ruby 3.2.10p266
 
 BUNDLED WITH
    2.6.9
