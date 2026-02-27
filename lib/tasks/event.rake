@@ -34,4 +34,22 @@ namespace :event do
 
     puts("Rake task has completed!")
   end
+
+  desc "Re-queue SQS re-index messages for unique DOIs in events updated within a date range"
+  # Dates are inclusive. END_DATE defaults to START_DATE for single-day runs.
+  task reindex_touched_dois: :environment do
+    raise "START_DATE is required" if ENV["START_DATE"].blank?
+
+    start_date = Date.parse(ENV["START_DATE"])
+    end_date   = Date.parse(ENV["END_DATE"].presence || ENV["START_DATE"])
+
+    raise "END_DATE must be on or after START_DATE" if end_date < start_date
+
+    count = Event.reindex_touched_dois(
+      start_date: start_date,
+      end_date:   end_date
+    )
+
+    puts "Sent #{count} unique DOIs for re-indexing."
+  end
 end

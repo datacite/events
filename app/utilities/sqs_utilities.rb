@@ -6,6 +6,11 @@ module SqsUtilities
       send_message(data, shoryuken_class: "OtherDoiJob", queue_name: "events_other_doi_job")
     end
 
+    # ReindexDoiJob not implemented yet.
+    # def send_events_doi_index_message(data)
+    #   send_message(data, shoryuken_class: "ReindexDoiJob", queue_name: "lupo_background")
+    # end
+
     private
 
     def send_message(body, options = {})
