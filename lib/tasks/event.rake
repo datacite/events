@@ -47,7 +47,7 @@ namespace :event do
 
     count = Event.reindex_touched_dois(
       start_date: start_date,
-      end_date:   end_date
+      end_date:   end_date,
     )
 
     puts "Sent #{count} unique DOIs for re-indexing."

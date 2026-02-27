@@ -140,23 +140,31 @@ class Event < ApplicationRecord
     indexes :cache_key, type: :keyword
   end
 
-  def self.reindex_touched_dois(start_date:, end_date:, threads: 20)
-    total = 0
+  class << self
+    def reindex_touched_dois(start_date:, end_date:, threads: 20)
+      total = 0
 
-    start_date.to_date.upto(end_date.to_date) do |date|
-      dois = Set.new
+      start_date.to_date.upto(end_date.to_date) do |date|
+        dois = Set.new
 
-      where(updated_at: date.all_day).where(source_relation_type_id: RelationTypes::SOURCE_RELATION_TYPES).distinct.pluck(:source_doi).each { |doi| dois << doi }
-      where(updated_at: date.all_day).where(target_relation_type_id: RelationTypes::TARGET_RELATION_TYPES).distinct.pluck(:target_doi).each { |doi| dois << doi }
+        where(updated_at: date.all_day)
+          .where(source_relation_type_id: RelationTypes::SOURCE_RELATION_TYPES)
+          .distinct.pluck(:source_doi)
+          .each { |doi| dois << doi }
+        where(updated_at: date.all_day)
+          .where(target_relation_type_id: RelationTypes::TARGET_RELATION_TYPES)
+          .distinct.pluck(:target_doi)
+          .each { |doi| dois << doi }
 
-      # Test performance before enabling SQS queues.
-      # Parallel.each(dois.to_a, in_threads: threads) do |doi|
-      #   SqsUtilities.send_events_doi_index_message({ doi: doi })
-      # end
+        # Test performance before enabling SQS queues.
+        # Parallel.each(dois.to_a, in_threads: threads) do |doi|
+        #   SqsUtilities.send_events_doi_index_message({ doi: doi })
+        # end
 
-      total += dois.size
+        total += dois.size
+      end
+
+      total
     end
-
-    total
   end
 end
