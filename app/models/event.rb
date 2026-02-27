@@ -141,7 +141,7 @@ class Event < ApplicationRecord
   end
 
   class << self
-    def reindex_touched_dois(start_date:, end_date:, threads: 20)
+    def reindex_touched_dois(start_date:, end_date:, threads: 10)
       total = 0
 
       start_date.to_date.upto(end_date.to_date) do |date|
