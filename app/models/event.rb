@@ -158,7 +158,7 @@ class Event < ApplicationRecord
 
         # Test performance before enabling SQS queues.
         # Parallel.each(dois.to_a, in_threads: threads) do |doi|
-        #   SqsUtilities.send_events_doi_index_message({ doi: doi })
+        #   SqsUtilities.send_events_doi_index_message(doi)
         # end
 
         total += dois.size
