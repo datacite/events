@@ -68,4 +68,8 @@ module RelationTypes
     "datacite-crossref",
     "crossref",
   ].freeze
+
+  # relation_type_ids that affect counts in lupo.
+  SOURCE_RELATION_TYPES = ["references", "parts", "versions"].freeze
+  TARGET_RELATION_TYPES = ["views", "downloads", "citations", "part_of", "version_of"].freeze
 end
