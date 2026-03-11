@@ -156,10 +156,9 @@ class Event < ApplicationRecord
           .distinct.pluck(:target_doi)
           .each { |doi| dois << doi }
 
-        # Test performance before enabling SQS queues.
-        # Parallel.each(dois.to_a, in_threads: threads) do |doi|
-        #   SqsUtilities.send_events_doi_index_message(doi)
-        # end
+        Parallel.each(dois.to_a, in_threads: threads) do |doi|
+          SqsUtilities.send_events_doi_index_message({ doi: doi })
+        end
 
         total += dois.size
       end
