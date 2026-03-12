@@ -156,7 +156,7 @@ class Event < ApplicationRecord
           .distinct.pluck(:target_doi)
           .each { |doi| dois << doi }
 
-        Parallel.each(dois.to_a, in_threads: threads) do |doi|
+        Parallel.each(dois, in_threads: threads) do |doi|
           SqsUtilities.send_events_doi_index_message({ doi: doi })
         end
 
