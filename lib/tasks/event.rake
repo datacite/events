@@ -35,13 +35,11 @@ namespace :event do
     puts("Rake task has completed!")
   end
 
-  desc "Re-queue SQS re-index messages for unique DOIs in events updated within a date range"
-  # Dates are inclusive. END_DATE defaults to START_DATE for single-day runs.
+  desc "Queue SQS re-index messages for unique DOIs in events updated within a date range"
+  # Dates are inclusive. START_DATE defaults to yesterday. END_DATE defaults to START_DATE. Example command: START_DATE=2026-03-01 END_DATE=2026-03-02 bundle exec rake event:reindex_touched_dois
   task reindex_touched_dois: :environment do
-    raise "START_DATE is required" if ENV["START_DATE"].blank?
-
-    start_date = Date.parse(ENV["START_DATE"])
-    end_date   = Date.parse(ENV["END_DATE"].presence || ENV["START_DATE"])
+    start_date = ENV["START_DATE"].presence ? Date.parse(ENV["START_DATE"]) : Date.yesterday
+    end_date   = ENV["END_DATE"].presence ? Date.parse(ENV["END_DATE"]) : start_date
 
     raise "END_DATE must be on or after START_DATE" if end_date < start_date
 
