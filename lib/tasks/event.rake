@@ -36,7 +36,8 @@ namespace :event do
   end
 
   desc "Queue SQS re-index messages for unique DOIs in events updated within a date range"
-  # Dates are inclusive. START_DATE defaults to yesterday. END_DATE defaults to START_DATE. Example command: START_DATE=2026-03-01 END_DATE=2026-03-02 bundle exec rake event:reindex_touched_dois
+  # Dates are inclusive. START_DATE defaults to yesterday. END_DATE defaults to START_DATE.
+  # Example command: START_DATE=2026-03-01 END_DATE=2026-03-02 bundle exec rake event:reindex_touched_dois
   task reindex_touched_dois: :environment do
     start_date = ENV["START_DATE"].presence ? Date.parse(ENV["START_DATE"]) : Date.yesterday
     end_date   = ENV["END_DATE"].presence ? Date.parse(ENV["END_DATE"]) : start_date
