@@ -49,6 +49,6 @@ namespace :event do
       end_date:   end_date,
     )
 
-    puts "Sent #{count} unique DOIs for re-indexing."
+    Rails.logger.info("Sent #{count} unique DOIs for re-indexing between #{start_date} and #{end_date}.")
   end
 end
