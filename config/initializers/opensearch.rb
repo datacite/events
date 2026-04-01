@@ -7,11 +7,12 @@ require "faraday/excon"
 # x-elastic-product: Elasticsearch, which OpenSearch does not.
 module ElasticsearchV8OpenSearchBypass
   private
-    def verify_elasticsearch(*args, &block)
-      response = @transport.perform_request(*args, &block)
-      @verified = true
-      response
-    end
+
+  def verify_elasticsearch(*args, &block)
+    response = @transport.perform_request(*args, &block)
+    @verified = true
+    response
+  end
 end
 
 Elasticsearch::Client.prepend(ElasticsearchV8OpenSearchBypass)
