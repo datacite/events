@@ -1,32 +1,28 @@
 source "https://rubygems.org"
 
-ruby "3.2.10"
+ruby "4.0.1"
 
-gem "rails", "~> 7.2", ">= 7.2.3"
-gem "bootsnap", require: false
-gem "rack-cors"
-gem "shoryuken", "~> 7.0"
-gem "aws-sdk-sqs", "~> 1.3"
-gem "lograge", "~> 0.11.2"
-gem "logstash-event", "~> 1.2", ">= 1.2.02"
-gem "logstash-logger", "~> 0.26.1"
-gem "mysql2", "~> 0.5.3"
-gem "dotenv"
-gem "sentry-ruby"
-gem "sentry-rails"
-gem "elasticsearch", "~> 7.17", ">= 7.17.10"
-gem "elasticsearch-model", "~> 7.2.1", ">= 7.2.1", require: "elasticsearch/model"
-gem "elasticsearch-rails", "~> 7.2.1", ">= 7.2.1"
-gem "elasticsearch-transport", "~> 7.17", ">= 7.17.10"
+gem "rails", "~> 8.1", ">= 8.1.2.1"
+gem "bootsnap", "~> 1.23", require: false
+gem "rack-cors", "~> 3.0"
+gem "shoryuken", "~> 7.0", ">= 7.0.1"
+gem "aws-sdk-sqs", "~> 1.112"
+gem "lograge", "~> 0.14.0"
+gem "logstash-logger", "~> 1.0"
+gem "mysql2", "~> 0.5.7"
+gem "dotenv", "~> 3.2"
+gem "sentry-ruby", "~> 6.5"
+gem "sentry-rails", "~> 6.5"
+gem "elasticsearch", "~> 8.19", ">= 8.19.3"
+gem "elasticsearch-model", "~> 8.0", ">= 8.0.1", require: "elasticsearch/model"
+gem "elasticsearch-rails", "~> 8.0", ">= 8.0.1"
+gem "elastic-transport", "~> 8.0", ">= 8.0.1"
 gem "git", "~> 1.5"
-gem "faraday", "~> 2.9"
-gem "faraday_middleware-aws-sigv4", "~> 0.3.0"
-gem "faraday-excon"
+gem "faraday", "~> 2.14", ">= 2.14.1"
+gem "faraday_middleware-aws-sigv4", "~> 1.0", ">= 1.0.1"
+gem "faraday-excon", "~> 2.4"
 gem "uuid", "~> 2.3", ">= 2.3.9"
-gem "oj", "~> 3.16", ">= 3.16.11"
-
-# This gem will allow us to write tests without the need for a database
-gem "activerecord-nulldb-adapter", "~> 1.1", ">= 1.1.1"
+gem "oj", "~> 3.16", ">= 3.16.16"
 gem "parallel", "~> 1.27"
 
 group :development, :test do
@@ -48,4 +44,5 @@ group :test do
   gem "simplecov", require: false
   gem "shoulda-matchers"
   gem "coveralls_reborn", require: false
+  gem "activerecord-nulldb-adapter", "~> 1.2", ">= 1.2.2" # This gem will allow us to write tests without the need for a database
 end
