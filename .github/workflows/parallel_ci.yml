@@ -25,10 +25,15 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: "3.2.10"
+          ruby-version: "4.0.1"
           bundler-cache: true
 
       - name: Run Specs
         run: bundle exec rspec
         env:
           COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
+
+      - name: Security Check
+        run: |
+          bundle exec bundler-audit check --update
+          bundle exec brakeman --no-pager
