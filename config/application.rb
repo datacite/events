@@ -17,11 +17,9 @@ if File.exist?(env_json_file)
   env_vars.each { |k, v| ENV[k] = v }
 end
 
-ENV["GITHUB_URL"] ||= "https://github.com/datacite/events"
-
 module Events
   class Application < Rails::Application
-    config.load_defaults(7.2)
+    config.load_defaults 8.1
 
     config.autoload_lib(ignore: nil)
 
@@ -48,5 +46,6 @@ module Events
 
     config.active_job.queue_adapter = :shoryuken
     config.active_job.queue_name_prefix = Rails.env
+    config.active_storage.variant_processor = :disabled
   end
 end
