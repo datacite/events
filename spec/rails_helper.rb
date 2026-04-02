@@ -1,13 +1,12 @@
 require "simplecov"
 require "coveralls"
 
-SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new([
-  SimpleCov::Formatter::HTMLFormatter,
-  Coveralls::SimpleCov::Formatter,
-])
-
-require "simplecov"
-SimpleCov.start("rails")
+SimpleCov.start("rails") do
+  formatter SimpleCov::Formatter::MultiFormatter.new([
+    SimpleCov::Formatter::HTMLFormatter,
+    Coveralls::SimpleCov::Formatter,
+  ])
+end
 
 require "spec_helper"
 ENV["RAILS_ENV"] ||= "test"
