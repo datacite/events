@@ -1,12 +1,9 @@
 FROM phusion/passenger-ruby40:3.1.6
 
-ARG GIT_TAG=1.0
-
 # Set correct environment variables.
 ENV HOME=/home/app
 ENV LC_ALL=en_US.UTF-8
 ENV LANG=en_US.UTF-8
-ENV GIT_TAG=${GIT_TAG}
 
 # Allow app user to read /etc/container_environment
 RUN usermod -a -G docker_env app
@@ -69,6 +66,9 @@ COPY vendor/docker/90_migrate.sh /etc/my_init.d/90_migrate.sh
 
 # Add the directory to the list of safe directories
 RUN git config --global --add safe.directory /home/app/webapp
+
+ARG GIT_TAG=1.0
+ENV GIT_TAG=${GIT_TAG}
 
 # Expose web
 EXPOSE 80
