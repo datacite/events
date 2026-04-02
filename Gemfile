@@ -3,6 +3,7 @@ source "https://rubygems.org"
 ruby "4.0.1"
 
 gem "rails", "~> 8.1", ">= 8.1.2.1"
+gem "addressable", "~> 2.8", ">= 2.8.9"
 gem "bootsnap", "~> 1.23", require: false
 gem "rack-cors", "~> 3.0"
 gem "shoryuken", "~> 7.0", ">= 7.0.1"
