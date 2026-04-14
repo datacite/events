@@ -61,11 +61,11 @@ RSpec.describe(EventIndexJob, type: :job) do
       end
     end
 
-    describe "Elasticsearch::Transport::Transport::Errors::BadRequest" do
-      let(:error) { Elasticsearch::Transport::Transport::Errors::BadRequest.allocate }
+    describe "Elastic::Transport::Transport::Errors::BadRequest" do
+      let(:error) { Elastic::Transport::Transport::Errors::BadRequest.allocate }
 
       before do
-        allow(error).to(receive(:message).and_return("Elasticsearch::Transport::Transport::Errors::BadRequest"))
+        allow(error).to(receive(:message).and_return("Elastic::Transport::Transport::Errors::BadRequest"))
 
         allow(event.__elasticsearch__)
           .to(receive(:index_document)
@@ -79,15 +79,15 @@ RSpec.describe(EventIndexJob, type: :job) do
       it "logs the error" do
         described_class.perform_now(event)
 
-        expect(Rails.logger).to(have_received(:error).with("Elasticsearch::Transport::Transport::Errors::BadRequest"))
+        expect(Rails.logger).to(have_received(:error).with("Elastic::Transport::Transport::Errors::BadRequest"))
       end
     end
 
-    describe "Elasticsearch::Transport::Transport::Error" do
+    describe "Elastic::Transport::Transport::Error" do
       let(:error) { SocketError.allocate }
 
       before do
-        allow(error).to(receive(:message).and_return("Elasticsearch::Transport::Transport::Error"))
+        allow(error).to(receive(:message).and_return("Elastic::Transport::Transport::Error"))
 
         allow(event.__elasticsearch__)
           .to(receive(:index_document)
@@ -101,7 +101,7 @@ RSpec.describe(EventIndexJob, type: :job) do
       it "logs the error" do
         described_class.perform_now(event)
 
-        expect(Rails.logger).to(have_received(:error).with("Elasticsearch::Transport::Transport::Error"))
+        expect(Rails.logger).to(have_received(:error).with("Elastic::Transport::Transport::Error"))
       end
     end
   end

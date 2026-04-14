@@ -1,19 +1,5 @@
-require "git"
-
 module Events
   class Application
-    begin
-      if File.directory?(Rails.root.join(".git"))
-        g = Git.open(Rails.root)
-        VERSION = g.tags.map { |t| Gem::Version.new(t.name) }.max.to_s
-        REVISION = g.object("HEAD").sha
-      else
-        VERSION = "unknown"
-        REVISION = "unknown"
-      end
-    rescue => _
-      VERSION = "unknown"
-      REVISION = "unknown"
-    end
+    VERSION = ENV.fetch("GIT_TAG", "1.0.0")
   end
 end
