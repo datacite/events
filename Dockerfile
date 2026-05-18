@@ -1,4 +1,4 @@
-FROM phusion/passenger-ruby32:3.1.6
+FROM phusion/passenger-ruby40:3.1.6
 
 # Set correct environment variables.
 ENV HOME=/home/app
@@ -12,7 +12,7 @@ RUN usermod -a -G docker_env app
 CMD ["/sbin/my_init"]
 
 #  Use Ruby
-RUN bash -lc 'rvm --default use ruby-3.2.10'
+RUN bash -lc 'rvm --default use ruby-4.0.1'
 
 # Update installed APT packages
 RUN apt-get update && apt-get upgrade -y -o Dpkg::Options::="--force-confold" && \
@@ -66,6 +66,9 @@ COPY vendor/docker/90_migrate.sh /etc/my_init.d/90_migrate.sh
 
 # Add the directory to the list of safe directories
 RUN git config --global --add safe.directory /home/app/webapp
+
+ARG GIT_TAG=1.0
+ENV GIT_TAG=${GIT_TAG}
 
 # Expose web
 EXPOSE 80
