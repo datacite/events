@@ -18,7 +18,7 @@ class ReindexTouchedDoisWorker
 
 
     # Reindex touched DOIS
-    count = Event.reindex_touched_dois(start_date: date, end_date: start_date)
+    count = Event.reindex_touched_dois(start_date: date, end_date: date)
 
     Rails.logger.info("#{log_prefix} Sent #{count} unique DOIs for re-indexing on #{date}")
   end
