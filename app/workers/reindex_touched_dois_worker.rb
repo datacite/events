@@ -7,15 +7,13 @@ class ReindexTouchedDoisWorker
     log_prefix = "[Events:ReindexTouchedDoisWorker]"
 
     date = get_date(data)
-    date = Date.parse(date) rescue nil
 
     Rails.logger.info("#{log_prefix} Starting reindex of DOIs touched on #{date}")
 
     if date.nil?
-      Rails.logger.error("#{log_prefix} Date was blank")
+      Rails.logger.error("#{log_prefix} Date was not provided")
       return
     end
-
 
     # Reindex touched DOIS
     count = Event.reindex_touched_dois(start_date: date, end_date: date)
@@ -31,5 +29,11 @@ class ReindexTouchedDoisWorker
 
     data_hash = JSON.parse(data)
     data_hash.dig("data", "date")
+
+    begin
+      Date.parse(date)
+    rescue
+      nil
+    end
   end
 end
