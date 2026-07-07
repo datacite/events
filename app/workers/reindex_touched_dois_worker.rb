@@ -5,11 +5,11 @@ class ReindexTouchedDoisWorker
 
   def perform(sqs_message = nil, data = nil)
     log_prefix = "[Events:ReindexTouchedDoisWorker]"
-    Rails.logger.info("#{log_prefix} Starting reindexing of touched DOIs")
-    puts "#{log_prefix} Starting reindexing of touched DOIs"
 
     date = get_date(data)
     date = Date.parse(date) rescue nil
+
+    Rails.logger.info("#{log_prefix} Starting reindex of DOIs touched on #{date}")
 
     if date.nil?
       Rails.logger.error("#{log_prefix} Date was blank")
