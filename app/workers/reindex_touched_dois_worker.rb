@@ -28,7 +28,7 @@ class ReindexTouchedDoisWorker
     return if data.blank?
 
     data_hash = JSON.parse(data)
-    data_hash.dig("data", "date")
+    data_hash.dig("date")
 
     begin
       Date.parse(date)
