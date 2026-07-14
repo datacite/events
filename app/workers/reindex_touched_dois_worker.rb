@@ -2,9 +2,9 @@ class ReindexTouchedDoisWorker
   include Shoryuken::Worker
 
   shoryuken_options queue: -> { "#{ENV["RAILS_ENV"]}_events_reindex_daily" }, auto_delete: true
-  log_prefix = "[Events:ReindexTouchedDoisWorker]"
 
   def perform(sqs_message = nil, data = nil)
+    log_prefix = "[Events:ReindexTouchedDoisWorker]"
     Rails.logger.info("#{log_prefix} Starting reindex of DOIs touched on #{date}")
 
     date = JSON.parse(data).dig("date")
