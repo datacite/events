@@ -7,9 +7,7 @@ class ReindexTouchedDoisWorker
     log_prefix = "[Events:ReindexTouchedDoisWorker]"
 
     date = JSON.parse(data).dig("date")
-    Rails.logger.error("#{log_prefix} data date: #{date}")
     date = Date.parse(date)
-    Rails.logger.error("#{log_prefix} parsed date: #{date}")
 
     if date.nil?
       Rails.logger.error("#{log_prefix} Date was not provided")
