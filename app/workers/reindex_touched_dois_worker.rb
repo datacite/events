@@ -5,8 +5,8 @@ class ReindexTouchedDoisWorker
 
   def perform(sqs_message = nil, data = nil)
     log_prefix = "[Events:ReindexTouchedDoisWorker]"
-    Rails.logger.info("#{log_prefix} Received message body: #{sqs_message.body}")
-    Rails.logger.info("#{log_prefix} Received message data: #{data}")
+    Rails.logger.error("#{log_prefix} Received message body: #{sqs_message.body}")
+    Rails.logger.error("#{log_prefix} Received message data: #{data}")
 
     date = get_date(data)
 
